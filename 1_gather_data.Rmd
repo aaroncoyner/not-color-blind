@@ -1,0 +1,309 @@
+---
+title: 'Create Datasets'
+author: 'Author: Aaron S Coyner, PhD'
+date: 'Last update: `r Sys.Date()`'
+output:
+    html_notebook:
+        toc: yes
+        toc_float: yes
+        toc_depth: 3
+---
+
+
+## Setup
+```{r}
+library(tidyverse)
+library(janitor)
+library(tools)
+library(reshape2)
+library(groupdata2)
+library(fs)
+library(knitr)
+```
+
+
+```{r}
+## directory where i-ROP data located
+data_dir <- file.path('..', '..', 'irop_data')
+
+## list of all available subjects and associated images and race
+irop_data <- file.path(data_dir, 'irop_07092020.csv') %>%
+    read_csv(col_types = cols()) %>%
+    clean_names()
+
+## list of all siblings in the i-ROP dataset
+siblings <- file.path(data_dir, 'multiple_birth_subjects.csv') %>%
+    read_csv() %>%
+    clean_names()
+    
+## list of all downloaded fundus images
+fundus_images <- file.path(data_dir, 'retcam') %>%
+    list.files() %>%
+    as.data.frame() %>%
+    mutate(image_id = file_path_sans_ext(.)) %>%
+    rename(fundus_location = '.')
+
+## list of all downloaded segmentations
+segmentations <- file.path(data_dir, 'segmentations') %>%
+    list.files() %>%
+    as.data.frame() %>%
+    mutate(image_id = file_path_sans_ext(.)) %>%
+    rename(segmentation_location = '.')
+
+## list of downloaded fundus images that have associated segmentations
+common_images <- fundus_images %>%
+    inner_join(segmentations, by = 'image_id')
+```
+
+## Clean data
+```{r}
+## remove subjects who are or have a sibling in this dataset
+## remove Hispanic babies and babies that are not Black or White
+## remove babies that have ever had TR-ROP and babies that currently have any degree of ROP
+clean_data <- irop_data %>%
+    clean_names() %>%
+    anti_join(siblings, by = 'subject_id') %>%
+    group_by(subject_id) %>%
+    mutate(worst_category_rop = if_else(eye == 'od', worst_category_ropod, worst_category_ropos)) %>%
+    ungroup() %>%
+    filter(reader == 'goldenstandardreading@ohsu.edu',
+           super_ethnicity == 'Non-Hispanic',
+           race == 'African American' | race == 'Caucasian/White',
+           worst_category_rop != 'Treatment Requiring',
+           golden_reading_category == 'None') %>%
+    mutate(race = if_else(race == 'African American', 'black', 'white'))
+
+summary(clean_data)
+```
+
+
+```{r}
+## select only subject_id, race, and the 5 image view columns per eye per exam per baby
+## pivot those 7 columns into 4 columns: subject_id, race, view, image_location
+## drop columns without image locations available
+## get basename of image urls/locations
+## filter out images in this dataset that do not have both an available fundus image and segmentation
+melted_data <- clean_data %>%
+    select(subject_id, race, posterior, inferior, superior, nasal, temporal) %>%
+    melt(id.vars = c('subject_id', 'race')) %>%
+    na_if('NULL') %>%
+    drop_na() %>%
+    mutate(image_id = file_path_sans_ext(basename(value))) %>%
+    inner_join(common_images, by = 'image_id') %>%
+    mutate(across(c(subject_id, race, variable), as.factor))
+
+summary(melted_data)
+```
+
+## Partition data
+```{r}
+## set seed for reproducibility
+## partition data into three datasets, roughly 50/5/45, keeping subjects mutually exclusive while
+## attempting to maintain race distribution
+## take the first partition (train) and downsample the number of images so that races are equally
+## represented
+## shuffle the training data labels for a separate experiment
+## take the second partition (val) and downsample the number of images so that races are equally
+## represented
+## take the third partition (test) and keep only one image from each subject
+set.seed(1337)
+
+partitioned_data <- melted_data %>%
+    partition(p = c(0.5, 0.05),
+              id_col = 'subject_id',
+              cat_col = 'race')
+
+train_data <- partitioned_data[[1]] %>%
+    balance(size = 'min', cat_col = 'race')
+
+train_data_random_labels <- train_data %>%
+    sample_frac() %>%
+    mutate(random_label = c(rep(0, floor(nrow(train_data) / 2)), rep(1, ceiling(nrow(train_data) / 2))))
+
+val_data <- partitioned_data[[2]] %>%
+    balance(size = 'min', cat_col = 'race')
+
+test_data <- partitioned_data[[3]] #%>%
+    # distinct(subject_id, .keep_all = TRUE)
+```
+
+
+
+```{r}
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% train_data$subject_id) %>%
+    group_by(race) %>%
+    t.test(gestational_age_weeks ~ race, data = .)
+```
+
+
+```{r}
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = mean(gestational_age_weeks),
+              sd_ga = sd(gestational_age_weeks),
+              mean_bw = mean(birth_weight),
+              sd_bw = sd(birth_weight)) %>%
+    kable(caption = 'All Data')
+
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% train_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = mean(gestational_age_weeks),
+              sd_ga = sd(gestational_age_weeks),
+              mean_bw = mean(birth_weight),
+              sd_bw = sd(birth_weight)) %>%
+    kable(caption = 'Train Data')
+
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% val_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = mean(gestational_age_weeks),
+              sd_ga = sd(gestational_age_weeks),
+              mean_bw = mean(birth_weight),
+              sd_bw = sd(birth_weight)) %>%
+    kable(caption = 'Validation Data')
+
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% test_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = mean(gestational_age_weeks),
+              sd_ga = sd(gestational_age_weeks),
+              mean_bw = mean(birth_weight),
+              sd_bw = sd(birth_weight)) %>%
+    kable(caption = 'Test Data')
+```
+
+```{r}
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_pma = mean(pma_weeks),
+              sd_pma = sd(pma_weeks)) %>%
+    kable(caption = 'All Data')
+
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% train_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_pma = mean(pma_weeks),
+              sd_pma = sd(pma_weeks)) %>%
+    kable(caption = 'Train Data')
+
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% val_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_pma = mean(pma_weeks),
+              sd_pma = sd(pma_weeks)) %>%
+    kable(caption = 'Validation Data')
+
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% test_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_pma = mean(pma_weeks),
+              sd_pma = sd(pma_weeks)) %>%
+    kable(caption = 'Test Data')
+```
+
+
+## Move images to folders
+```{r}
+## create folders for datasets
+dir_create('./out/datasets/retcam/train/black')
+dir_create('./out/datasets/retcam/train/white')
+dir_create('./out/datasets/retcam/train_random/0')
+dir_create('./out/datasets/retcam/train_random/1')
+dir_create('./out/datasets/retcam/val/black')
+dir_create('./out/datasets/retcam/val/white')
+dir_create('./out/datasets/retcam/test/black')
+dir_create('./out/datasets/retcam/test/white')
+
+dir_create('./out/datasets/segmentations/train/black')
+dir_create('./out/datasets/segmentations/train/white')
+dir_create('./out/datasets/segmentations/train_random/0')
+dir_create('./out/datasets/segmentations/train_random/1')
+dir_create('./out/datasets/segmentations/val/black')
+dir_create('./out/datasets/segmentations/val/white')
+dir_create('./out/datasets/segmentations/test/black')
+dir_create('./out/datasets/segmentations/test/white')
+
+## write CSV files of datasets
+write_csv(train_data, 'out/datasets/train_data.csv')
+write_csv(train_data_random_labels, 'out/datasets/train_data_random.csv')
+write_csv(val_data, 'out/datasets/val_data.csv')
+write_csv(test_data, 'out/datasets/test_data.csv')
+```
+
+
+```{r}
+## copy retcam images to folder
+src = '/Volumes/External/irop_data/retcam'
+
+dst = './out/datasets/retcam/train/'
+file_copy(paste(src, train_data$fundus_location, sep = '/'),
+          paste(dst, train_data$race, train_data$fundus_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/retcam/train_random/'
+file_copy(paste(src, train_data_random_labels$fundus_location, sep = '/'),
+          paste(dst, train_data_random_labels$random_label, train_data_random_labels$fundus_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/retcam/val/'
+file_copy(paste(src, val_data$fundus_location, sep = '/'),
+          paste(dst, val_data$race, val_data$fundus_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/retcam/test/'
+file_copy(paste(src, test_data$fundus_location, sep = '/'),
+          paste(dst, test_data$race, test_data$fundus_location, sep = '/'),
+          overwrite = TRUE)
+```
+
+
+```{r}
+## copy segmentations to folder
+src = '/Volumes/External/irop_data/segmentations'
+
+dst = './out/datasets/segmentations/train/'
+file_copy(paste(src, train_data$segmentation_location, sep = '/'),
+          paste(dst, train_data$race, train_data$segmentation_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/segmentations/train_random/'
+file_copy(paste(src, train_data_random_labels$segmentation_location, sep = '/'),
+          paste(dst, train_data_random_labels$random_label, train_data_random_labels$segmentation_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/segmentations/val/'
+file_copy(paste(src, val_data$segmentation_location, sep = '/'),
+          paste(dst, val_data$race, val_data$segmentation_location, sep = '/'),
+          overwrite = TRUE)
+
+dst = './out/datasets/segmentations/test/'
+file_copy(paste(src, test_data$segmentation_location, sep = '/'),
+          paste(dst, test_data$race, test_data$segmentation_location, sep = '/'),
+          overwrite = TRUE)
+```
+
