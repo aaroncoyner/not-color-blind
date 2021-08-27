@@ -22,14 +22,16 @@ class PretrainedModel(nn.Module):
         num_ftrs = model.fc.in_features
         model.fc = nn.Linear(num_ftrs, output_features)
         self.model = model
-        
+
     def forward(self, x):
         return self.model(x)
 
 
-def filter(img, threshold, binary, skeleton):
+def filter(img, threshold, binary, skeleton, upper, upper_threshold=150):
     img = np.array(img)
     img[img < threshold] = 0
+    if upper:
+        img[img > upper_threshold] = 0
     if binary or skeleton:
         img[img > 0] = 255
         if skeleton:
@@ -41,31 +43,35 @@ def filter(img, threshold, binary, skeleton):
     return img
 
 
-def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_classes=2,
-          batch_size=64, num_epochs=10, lr=0.001, image_size=(224,224), random=False):
+def train(data_dir, image_type, threshold=0, upper=False, upper_threshold=150, binary=False,
+          skeleton=False, num_classes=2, batch_size=64, num_epochs=10, lr=0.001, random=False,
+          image_size=(224,224)):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     if random:
         binary = False
         skeleton = False
-    if skeleton:
+        f_params = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_random.pt'
+        f_history = f'./out/histories/model_{image_type}_filtered_{threshold}_random.json'
+        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_random.csv'
+    elif skeleton:
         binary = False
-    if binary:
+        f_params = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_skeletonized.pt'
+        f_history = f'./out/histories/model_{image_type}_filtered_{threshold}_skeletonized.json'
+        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_skeletonized.csv'
+    elif binary:
         skeleton = False
-
-    print()
-    print(f'Data Directory: {data_dir}')
-    print(f'Image Type: {image_type}')
-    print(f'Threshold: {threshold}')
-    print(f'Binarize: {binary}')
-    print(f'Skeletonize: {skeleton}')
-    print(f'Number of Classes: {num_classes}')
-    print(f'Batch Size: {batch_size}')
-    print(f'Number of Epochs: {num_epochs}')
-    print(f'Initial Learning Rate: {lr}')
-    print(f'Device: {device}')
+        f_params = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_binarized.pt'
+        f_history = f'./out/histories/model_{image_type}_filtered_{threshold}_binarized.json'
+        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_binarized.csv'
+    else:
+        f_params = f'./out/checkpoints/model_{image_type}_filtered_{threshold}.pt'
+        f_history = f'./out/histories/model_{image_type}_filtered_{threshold}.json'
+        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}.csv'
 
     train_transforms = transforms.Compose([transforms.Lambda(lambda img: filter(img, threshold,
-                                                                         binary, skeleton)),
+                                                                                binary, skeleton,
+                                                                                upper,
+                                                                                upper_threshold)),
                                            transforms.Resize(image_size),
                                            transforms.RandomHorizontalFlip(),
                                            transforms.RandomVerticalFlip(),
@@ -75,7 +81,9 @@ def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_c
                                                                 [0.5, 0.5, 0.5])])
 
     test_transforms = transforms.Compose([transforms.Lambda(lambda img: filter(img, threshold,
-                                                                               binary, skeleton)),
+                                                                               binary, skeleton,
+                                                                               upper,
+                                                                               upper_threshold)),
                                           transforms.Resize(image_size),
                                           transforms.ToTensor(),
                                           transforms.Normalize([0.5, 0.5, 0.5],
@@ -87,13 +95,11 @@ def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_c
         train_folder = os.path.join(data_dir, image_type, 'train_random')
     val_folder = os.path.join(data_dir, image_type, 'val')
     test_folder = os.path.join(data_dir, image_type, 'test')
-        
+
     train_dataset = datasets.ImageFolder(train_folder, train_transforms)
     val_dataset = datasets.ImageFolder(val_folder, test_transforms)
     test_dataset = datasets.ImageFolder(test_folder, test_transforms)
 
-    # labels = test_dataset.samples
-    # print(labels)
     labels = np.array(train_dataset.samples)[:,1]
     labels = labels.astype(int)
     black_weight = 1 / len(labels[labels == 0])
@@ -102,27 +108,33 @@ def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_c
     weights = sample_weights[labels]
     sampler = torch.utils.data.WeightedRandomSampler(weights, len(train_dataset), replacement=True)
 
+    print()
+    print(f'Data Directory: {data_dir}')
+    print(f'Image Type: {image_type}')
+    print(f'Threshold: {threshold}')
+    print(f'Binarize: {binary}')
+    print(f'Skeletonize: {skeleton}')
+    print(f'Number of Classes: {num_classes}')
     print(f'Number of black eyes: {len(labels[labels == 0])}')
     print(f'Number of white eyes: {len(labels[labels == 1])}')
+    print(f'Batch Size: {batch_size}')
+    print(f'Number of Epochs: {num_epochs}')
+    print(f'Initial Learning Rate: {lr}')
+    print(f'Device: {device}')
     print()
 
-    if random:
-        pt_name = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_random.pt'
-    elif binary:
-        pt_name = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_binarized.pt'
-    elif skeleton:
-        pt_name = f'./out/checkpoints/model_{image_type}_filtered_{threshold}_skeletonized.pt'
-    else:
-        pt_name = f'./out/checkpoints/model_{image_type}_filtered_{threshold}.pt'
-
-    checkpoint = Checkpoint(f_params=pt_name, monitor='valid_loss_best')
+    checkpoint = Checkpoint(monitor='valid_loss_best',
+                            f_params=f_params,
+                            f_history=f_history,
+                            f_optimizer=None,
+                            f_criterion=None)
 
     train_acc = EpochScoring(scoring='accuracy',
                              on_train=True,
                              name='train_acc',
                              lower_is_better=False)
 
-    net = NeuralNetClassifier(PretrainedModel, 
+    net = NeuralNetClassifier(PretrainedModel,
                               criterion=nn.CrossEntropyLoss,
                               lr=lr,
                               batch_size=batch_size,
@@ -130,7 +142,6 @@ def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_c
                               module__output_features=num_classes,
                               optimizer=optim.SGD,
                               optimizer__momentum=0.9,
-                              # iterator_train__shuffle=True,
                               iterator_train__num_workers=16,
                               iterator_train__sampler=sampler,
                               iterator_valid__shuffle=False,
@@ -141,18 +152,12 @@ def train(data_dir, image_type, threshold=0, binary=False, skeleton=False, num_c
 
     net.fit(train_dataset, y=None)
 
+    img_locs = [loc for loc, _ in test_dataset.samples]
     test_probs = net.predict_proba(test_dataset)
+    test_probs = [prob[0] for prob in test_probs]
+    data = {'img_loc' : img_locs, 'probability' : test_probs}
+    pd.DataFrame(data=data).to_csv(csv_name, index=False)
 
-    if random:
-        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_random.csv'
-    elif binary:
-        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_binarized.csv'
-    elif skeleton:
-        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}_skeletonized.csv'
-    else:
-        csv_name = f'./out/probabilities/{image_type}_filtered_{threshold}.csv'
-
-    pd.DataFrame(test_probs).to_csv(csv_name)
 
 
 if __name__ == '__main__':
@@ -160,17 +165,30 @@ if __name__ == '__main__':
         os.makedirs(os.path.join('out', 'probabilities'))
     if not os.path.isdir(os.path.join('out', 'checkpoints')):
         os.makedirs(os.path.join('out', 'checkpoints'))
+    if not os.path.isdir(os.path.join('out', 'histories')):
+        os.makedirs(os.path.join('out', 'histories'))
 
     data_dir = os.path.join('out', 'datasets')
     train(data_dir, 'retcam')
     train(data_dir, 'retcam', random=True)
     train(data_dir, 'segmentations', random=True)
+
     thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 256]
     for threshold in thresholds:
         train(data_dir, 'segmentations', threshold=threshold)
         train(data_dir, 'segmentations', binary=True, threshold=threshold)
         train(data_dir, 'segmentations', skeleton=True, threshold=threshold)
-    # threshold = 75
-    # train(data_dir, 'segmentations', threshold=threshold)
-    # train(data_dir, 'segmentations', binary=True, threshold=threshold)
-    # train(data_dir, 'segmentations', skeleton=True, threshold=threshold)
+
+    threshold = 75
+    train(data_dir, 'segmentations', threshold=threshold, upper=True)
+    train(data_dir, 'segmentations', binary=True, threshold=threshold, upper=True)
+    train(data_dir, 'segmentations', skeleton=True, threshold=threshold, upper=True)
+
+    threshold = 0
+    upper_threshold = 10
+    train(data_dir, 'segmentations', threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
+    train(data_dir, 'segmentations', binary=True, threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
+    train(data_dir, 'segmentations', skeleton=True, threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
