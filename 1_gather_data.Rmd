@@ -113,18 +113,15 @@ partitioned_data <- melted_data %>%
               id_col = 'subject_id',
               cat_col = 'race')
 
-train_data <- partitioned_data[[1]] %>%
-    balance(size = 'min', cat_col = 'race')
+train_data <- partitioned_data[[1]]
 
 train_data_random_labels <- train_data %>%
     sample_frac() %>%
     mutate(random_label = c(rep(0, floor(nrow(train_data) / 2)), rep(1, ceiling(nrow(train_data) / 2))))
 
-val_data <- partitioned_data[[2]] %>%
-    balance(size = 'min', cat_col = 'race')
+val_data <- partitioned_data[[2]]
 
-test_data <- partitioned_data[[3]] #%>%
-    # distinct(subject_id, .keep_all = TRUE)
+test_data <- partitioned_data[[3]]
 ```
 
 
