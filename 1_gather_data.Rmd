@@ -109,7 +109,7 @@ summary(melted_data)
 set.seed(1337)
 
 partitioned_data <- melted_data %>%
-    partition(p = c(0.5, 0.05),
+    partition(p = c(0.5, 0.2),
               id_col = 'subject_id',
               cat_col = 'race')
 
@@ -117,7 +117,7 @@ train_data <- partitioned_data[[1]]
 
 train_data_random_labels <- train_data %>%
     sample_frac() %>%
-    mutate(random_label = c(rep(0, floor(nrow(train_data) / 2)), rep(1, ceiling(nrow(train_data) / 2))))
+    mutate(race = c(rep('black', floor(nrow(train_data) / 2)), rep('white', ceiling(nrow(train_data) / 2))))
 
 val_data <- partitioned_data[[2]]
 
@@ -227,23 +227,13 @@ clean_data %>%
 ## Move images to folders
 ```{r}
 ## create folders for datasets
-dir_create('./out/datasets/retcam/train/black')
-dir_create('./out/datasets/retcam/train/white')
-dir_create('./out/datasets/retcam/train_random/0')
-dir_create('./out/datasets/retcam/train_random/1')
-dir_create('./out/datasets/retcam/val/black')
-dir_create('./out/datasets/retcam/val/white')
-dir_create('./out/datasets/retcam/test/black')
-dir_create('./out/datasets/retcam/test/white')
-
-dir_create('./out/datasets/segmentations/train/black')
-dir_create('./out/datasets/segmentations/train/white')
-dir_create('./out/datasets/segmentations/train_random/0')
-dir_create('./out/datasets/segmentations/train_random/1')
-dir_create('./out/datasets/segmentations/val/black')
-dir_create('./out/datasets/segmentations/val/white')
-dir_create('./out/datasets/segmentations/test/black')
-dir_create('./out/datasets/segmentations/test/white')
+for (img_type in c('retcam', 'segmentations')) {
+    for (dataset in c('train', 'train_random', 'val', 'test')) {
+        for (race in c('black', 'white')) {
+            dir_create(file.path('out', 'datasets', img_type, dataset, race))
+        }
+    }
+}
 
 ## write CSV files of datasets
 write_csv(train_data, 'out/datasets/train_data.csv')
@@ -264,7 +254,7 @@ file_copy(paste(src, train_data$fundus_location, sep = '/'),
 
 dst = './out/datasets/retcam/train_random/'
 file_copy(paste(src, train_data_random_labels$fundus_location, sep = '/'),
-          paste(dst, train_data_random_labels$random_label, train_data_random_labels$fundus_location, sep = '/'),
+          paste(dst, train_data_random_labels$race, train_data_random_labels$fundus_location, sep = '/'),
           overwrite = TRUE)
 
 dst = './out/datasets/retcam/val/'
@@ -290,7 +280,7 @@ file_copy(paste(src, train_data$segmentation_location, sep = '/'),
 
 dst = './out/datasets/segmentations/train_random/'
 file_copy(paste(src, train_data_random_labels$segmentation_location, sep = '/'),
-          paste(dst, train_data_random_labels$random_label, train_data_random_labels$segmentation_location, sep = '/'),
+          paste(dst, train_data_random_labels$race, train_data_random_labels$segmentation_location, sep = '/'),
           overwrite = TRUE)
 
 dst = './out/datasets/segmentations/val/'
