@@ -46,7 +46,9 @@ def filter(img, threshold, binary, skeleton, upper, upper_threshold=150):
 def train(data_dir, image_type, threshold=0, upper=False, upper_threshold=150, binary=False,
           skeleton=False, num_classes=2, batch_size=64, num_epochs=10, lr=0.001, random=False,
           image_size=(224,224)):
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
+    if device == 'cuda:0':
+        torch.cuda.empty_cache()
     if random:
         binary = False
         skeleton = False
@@ -169,15 +171,6 @@ if __name__ == '__main__':
         os.makedirs(os.path.join('out', 'histories'))
 
     data_dir = os.path.join('out', 'datasets')
-    train(data_dir, 'retcam')
-    train(data_dir, 'retcam', random=True)
-    train(data_dir, 'segmentations', random=True)
-
-    thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 256]
-    for threshold in thresholds:
-        train(data_dir, 'segmentations', threshold=threshold)
-        train(data_dir, 'segmentations', binary=True, threshold=threshold)
-        train(data_dir, 'segmentations', skeleton=True, threshold=threshold)
 
     threshold = 75
     train(data_dir, 'segmentations', threshold=threshold, upper=True)
@@ -192,3 +185,13 @@ if __name__ == '__main__':
           upper=True, upper_threshold=upper_threshold)
     train(data_dir, 'segmentations', skeleton=True, threshold=threshold,
           upper=True, upper_threshold=upper_threshold)
+
+    train(data_dir, 'retcam')
+    train(data_dir, 'retcam', random=True)
+    train(data_dir, 'segmentations', random=True)
+
+    thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 256]
+    for threshold in thresholds:
+        train(data_dir, 'segmentations', threshold=threshold)
+        train(data_dir, 'segmentations', binary=True, threshold=threshold)
+        train(data_dir, 'segmentations', skeleton=True, threshold=threshold)
