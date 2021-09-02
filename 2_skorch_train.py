@@ -5,7 +5,7 @@ import pandas as pd
 from skimage.morphology import skeletonize
 from PIL import Image
 from skorch import NeuralNetClassifier
-from skorch.callbacks import LRScheduler, Checkpoint, EpochScoring
+from skorch.callbacks import LRScheduler, Checkpoint, EpochScoring, EarlyStopping
 from skorch.dataset import Dataset
 from skorch.helper import predefined_split
 import torch
@@ -136,6 +136,10 @@ def train(data_dir, image_type, threshold=0, upper=False, upper_threshold=150, b
                              name='train_acc',
                              lower_is_better=False)
 
+    early_stopping = EarlyStopping()
+
+    callbacks = [checkpoint, train_acc, early_stopping]
+
     net = NeuralNetClassifier(PretrainedModel,
                               criterion=nn.CrossEntropyLoss,
                               lr=lr,
@@ -149,7 +153,7 @@ def train(data_dir, image_type, threshold=0, upper=False, upper_threshold=150, b
                               iterator_valid__shuffle=False,
                               iterator_valid__num_workers=16,
                               train_split=predefined_split(val_dataset),
-                              callbacks=[checkpoint, train_acc],
+                              callbacks=callbacks,
                               device=device)
 
     net.fit(train_dataset, y=None)
@@ -190,7 +194,7 @@ if __name__ == '__main__':
     train(data_dir, 'retcam', random=True)
     train(data_dir, 'segmentations', random=True)
 
-    thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 256]
+    thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 257]
     for threshold in thresholds:
         train(data_dir, 'segmentations', threshold=threshold)
         train(data_dir, 'segmentations', binary=True, threshold=threshold)
