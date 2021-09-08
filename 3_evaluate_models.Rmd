@@ -10,9 +10,10 @@ output:
 ---
 
 
-## Setup
+# Setup
 ```{r}
 library(tidyverse)
+library(tools)
 library(caret)
 library(ROCR)
 library(caret)
@@ -71,437 +72,710 @@ compute_aupr <- function(predictions, labels, title) {
 ```{r}
 confusion_matrix <- function(df, column, threshold=0.5) {
     preds <- as.factor(if_else(df[column] >= threshold, 1, 0))
-    confusionMatrix(preds, df$labels, positive = '1')
+    confusionMatrix(preds, df$label, positive = '1')
 }
 ```
 
 
 
-## Load data
+# Load data
 ```{r}
-image_order <- c('101740.bmp', '101923.bmp', '17363.bmp', '18794.bmp', '25387.bmp', '25840.bmp',
-                 '26082.bmp', '27314.bmp', '29430.bmp', '29974.bmp', '31241.bmp', '31354.bmp',
-                 '34420.bmp', '39205.bmp', '39426.bmp', '42180.bmp', '42363.bmp', '44655.bmp',
-                 '44770.bmp', '50952.bmp', '54042.bmp', '60163.bmp', '72980.bmp', '7388.bmp',
-                 '74088.bmp', '7420.bmp', '7452.bmp', '74729.bmp', '7509.bmp', '76794.bmp',
-                 '77072.bmp', '78663.bmp', '83872.bmp', '87359.bmp', '87421.bmp', '88751.bmp',
-                 '89095.bmp', '9474.bmp', '95298.bmp', '96650.bmp', '98256.bmp', '101991.bmp',
-                 '104346.bmp', '104408.bmp', '105445.bmp', '107298.bmp', '117090.bmp', '117150.bmp',
-                 '12545.bmp', '16798.bmp', '18161.bmp', '18166.bmp', '24561.bmp', '24570.bmp',
-                 '33884.bmp', '33938.bmp', '34238.bmp', '34299.bmp', '34458.bmp', '34764.bmp',
-                 '36915.bmp', '40371.bmp', '44599.bmp', '47091.bmp', '47363.bmp', '50212.bmp',
-                 '51122.bmp', '51140.bmp', '51444.bmp', '51490.bmp', '51509.bmp', '52375.bmp',
-                 '52947.bmp', '56553.bmp', '59100.bmp', '59148.bmp', '65184.bmp', '66440.bmp',
-                 '70015.bmp', '71215.bmp', '71482.bmp', '71540.bmp', '74253.bmp', '74611.bmp',
-                 '7570.bmp', '79539.bmp', '79603.bmp', '81679.bmp', '81847.bmp', '84375.bmp',
-                 '84392.bmp', '85610.bmp', '87273.bmp', '88547.bmp', '9133.bmp', '9169.bmp',
-                 '92065.bmp', '9400.bmp', '94830.bmp', '94907.bmp', '95625.bmp', '96310.bmp',
-                 '97321.bmp', '97926.bmp', '98689.bmp')
+test_data <- read_csv('./out/datasets/test_data.csv') %>%
+    select(subject_id, image_id)
 
-labels <- as.factor(c(rep.int(1, 41), rep.int(0, 64)))
 
-race_predictions <- data.frame(image_name = image_order, labels = labels) %>%
-    bind_cols(select(read_csv('./out/probabilities/retcam_filtered_0_random.csv', col_types = cols()), retcam_random = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/retcam_filtered_0.csv', col_types = cols()), retcam = `0`)) %>%
+image_level <- read_csv('./out/probabilities/retcam_filtered_0.csv', col_types = cols()) %>%
+    mutate(label = as.factor(if_else(str_detect(img_loc, 'black'), 1, 0)),
+           image_id = as.numeric(file_path_sans_ext(basename(img_loc)))) %>%
+    select(img_loc, image_id, label, retcam = probability) %>%
+    bind_cols(select(read_csv('./out/probabilities/retcam_filtered_0_random.csv', col_types = cols()), retcam_random = probability)) %>%
     
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_random.csv', col_types = cols()), filter_0_random = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0.csv', col_types = cols()), filter_0 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_binarized.csv', col_types = cols()), filter_0_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_skeletonized.csv', col_types = cols()), filter_0_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_random.csv', col_types = cols()), filter_0_random = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0.csv', col_types = cols()), filter_0 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_binarized.csv', col_types = cols()), filter_0_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_skeletonized.csv', col_types = cols()), filter_0_skeletonized = probability)) %>%
     
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50.csv', col_types = cols()), filter_50 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50_binarized.csv', col_types = cols()), filter_50_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50_skeletonized.csv', col_types = cols()), filter_50_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50.csv', col_types = cols()), filter_50 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50_binarized.csv', col_types = cols()), filter_50_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_50_skeletonized.csv', col_types = cols()), filter_50_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100.csv', col_types = cols()), filter_100 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100_binarized.csv', col_types = cols()), filter_100_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100_skeletonized.csv', col_types = cols()), filter_100_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100.csv', col_types = cols()), filter_100 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100_binarized.csv', col_types = cols()), filter_100_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_100_skeletonized.csv', col_types = cols()), filter_100_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150.csv', col_types = cols()), filter_150 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150_binarized.csv', col_types = cols()), filter_150_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150_skeletonized.csv', col_types = cols()), filter_150_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150.csv', col_types = cols()), filter_150 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150_binarized.csv', col_types = cols()), filter_150_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_150_skeletonized.csv', col_types = cols()), filter_150_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200.csv', col_types = cols()), filter_200 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200_binarized.csv', col_types = cols()), filter_200_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200_skeletonized.csv', col_types = cols()), filter_200_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200.csv', col_types = cols()), filter_200 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200_binarized.csv', col_types = cols()), filter_200_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_200_skeletonized.csv', col_types = cols()), filter_200_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210.csv', col_types = cols()), filter_210 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210_binarized.csv', col_types = cols()), filter_210_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210_skeletonized.csv', col_types = cols()), filter_210_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210.csv', col_types = cols()), filter_210 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210_binarized.csv', col_types = cols()), filter_210_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_210_skeletonized.csv', col_types = cols()), filter_210_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220.csv', col_types = cols()), filter_220 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220_binarized.csv', col_types = cols()), filter_220_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220_skeletonized.csv', col_types = cols()), filter_220_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220.csv', col_types = cols()), filter_220 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220_binarized.csv', col_types = cols()), filter_220_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_220_skeletonized.csv', col_types = cols()), filter_220_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230.csv', col_types = cols()), filter_230 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230_binarized.csv', col_types = cols()), filter_230_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230_skeletonized.csv', col_types = cols()), filter_230_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230.csv', col_types = cols()), filter_230 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230_binarized.csv', col_types = cols()), filter_230_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_230_skeletonized.csv', col_types = cols()), filter_230_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240.csv', col_types = cols()), filter_240 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240_binarized.csv', col_types = cols()), filter_240_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240_skeletonized.csv', col_types = cols()), filter_240_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240.csv', col_types = cols()), filter_240 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240_binarized.csv', col_types = cols()), filter_240_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_240_skeletonized.csv', col_types = cols()), filter_240_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250.csv', col_types = cols()), filter_250 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250_binarized.csv', col_types = cols()), filter_250_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250_skeletonized.csv', col_types = cols()), filter_250_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250.csv', col_types = cols()), filter_250 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250_binarized.csv', col_types = cols()), filter_250_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_250_skeletonized.csv', col_types = cols()), filter_250_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_256.csv', col_types = cols()), filter_256 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_256_binarized.csv', col_types = cols()), filter_256_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_256_skeletonized.csv', col_types = cols()), filter_256_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_257.csv', col_types = cols()), filter_257 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_257_binarized.csv', col_types = cols()), filter_257_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_257_skeletonized.csv', col_types = cols()), filter_257_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_10.csv', col_types = cols()), filter_10 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_10_binarized.csv', col_types = cols()), filter_10_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_10_skeletonized.csv', col_types = cols()), filter_10_skeletonized = `0`)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_10.csv', col_types = cols()), filter_10 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_10_binarized.csv', col_types = cols()), filter_10_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_0_10_skeletonized.csv', col_types = cols()), filter_10_skeletonized = probability)) %>%
 
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75.csv', col_types = cols()), filter_75 = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75_binarized.csv', col_types = cols()), filter_75_binarized = `0`)) %>%
-    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75_skeletonized.csv', col_types = cols()), filter_75_skeletonized = `0`))
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75_150.csv', col_types = cols()), filter_75 = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75_150_binarized.csv', col_types = cols()), filter_75_binarized = probability)) %>%
+    bind_cols(select(read_csv('./out/probabilities/segmentations_filtered_75_150_skeletonized.csv', col_types = cols()), filter_75_skeletonized = probability)) %>%
+    
+    inner_join(test_data, by = 'image_id') %>%
+    select(subject_id, everything(), -img_loc)
+
+
+
+subject_level <- image_level %>%
+    group_by(subject_id) %>%
+    mutate(across(c(-image_id, -label), median)) %>%
+    ungroup() %>%
+    distinct(subject_id, .keep_all = TRUE)
 ```
 
-## RetCam Images
-![](out/figures/retcam.png)
 
+# Image-level Analysis
 
-```{r}
-compute_auroc(race_predictions$retcam, race_predictions$labels, 'ROC: Raw RetCam Images')
-compute_aupr(race_predictions$retcam, race_predictions$labels, 'PR: Raw RetCam Images')
-confusion_matrix(race_predictions, 'retcam')
-```
+### RetCam Images
 
 ```{r}
-compute_auroc(race_predictions$retcam_random, race_predictions$labels, 'ROC: Raw RetCam Images - Shuffled Labels')
-compute_aupr(race_predictions$retcam_random, race_predictions$labels, 'PR: Raw RetCam Images - Shuffled Labels')
-confusion_matrix(race_predictions, 'retcam_random')
-```
-
-## Segmentations: zero all pixels < 0
-![](out/figures/segmentation_0.png)
-```{r}
-compute_auroc(race_predictions$filter_0, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 0')
-compute_aupr(race_predictions$filter_0, race_predictions$labels, 'PR: Segmentations: zero all pixels < 0')
-confusion_matrix(race_predictions, 'filter_0')
+compute_aupr(image_level$retcam, image_level$label, 'PR: Raw RetCam Images')
+compute_auroc(image_level$retcam, image_level$label, 'ROC: Raw RetCam Images')
+confusion_matrix(image_level, 'retcam')
 ```
 
 ```{r}
-preds <- race_predictions %>%
-    mutate(prediction = as.factor(if_else(filter_0 >= 0.5, 1, 0))) %>%
-    select(image_name, labels, prediction, filter_0)
-write_csv(preds, './out/seg_0_predictions.csv')
+compute_aupr(image_level$retcam_random, image_level$label, 'PR: Raw RetCam Images - Shuffled Labels')
+compute_auroc(image_level$retcam_random, image_level$label, 'ROC: Raw RetCam Images - Shuffled Labels')
+confusion_matrix(image_level, 'retcam_random')
 ```
 
 
 
-```{r}
-compute_auroc(race_predictions$filter_0_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 0 and binarize')
-compute_aupr(race_predictions$filter_0_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 0 and binarize')
-confusion_matrix(race_predictions, 'filter_0_binarized')
-```
-
+### Segmentations: zero all pixels < 0
 
 ```{r}
-compute_auroc(race_predictions$filter_0_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 0 and skeletonize')
-compute_aupr(race_predictions$filter_0_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 0 and skeletonize')
-confusion_matrix(race_predictions, 'filter_0_skeletonized')
-```
-
-
-```{r}
-compute_auroc(race_predictions$filter_0_random, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 0 - Shuffled Labels')
-compute_aupr(race_predictions$filter_0_random, race_predictions$labels, 'PR: Segmentations: zero all pixels < 0 - Shuffled Labels')
-confusion_matrix(race_predictions, 'filter_0_random')
-```
-
-
-## Segmentations: zero all pixels < 50
-![](out/figures/segmentation_50.png)
-```{r}
-compute_auroc(race_predictions$filter_50, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 50')
-compute_aupr(race_predictions$filter_50, race_predictions$labels, 'PR: Segmentations: zero all pixels < 50')
-confusion_matrix(race_predictions, 'filter_50')
+compute_aupr(image_level$filter_0, image_level$label, 'PR: Segmentations: zero all pixels < 0')
+compute_auroc(image_level$filter_0, image_level$label, 'ROC: Segmentations: zero all pixels < 0')
+confusion_matrix(image_level, 'filter_0')
 ```
 
 ```{r}
-preds <- race_predictions %>%
-    mutate(prediction = as.factor(if_else(filter_50 >= 0.5, 1, 0))) %>%
-    select(image_name, labels, prediction, filter_50)
-write_csv(preds, './out/seg_50_predictions.csv')
+compute_aupr(image_level$filter_0_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 0 and binarize')
+compute_auroc(image_level$filter_0_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 0 and binarize')
+confusion_matrix(image_level, 'filter_0_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_50_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 50 and binarize')
-compute_aupr(race_predictions$filter_50_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 50 and binarize')
-confusion_matrix(race_predictions, 'filter_0_binarized')
+compute_aupr(image_level$filter_0_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 0 and skeletonize')
+compute_auroc(image_level$filter_0_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 0 and skeletonize')
+confusion_matrix(image_level, 'filter_0_skeletonized')
 ```
 
 ```{r}
-preds <- race_predictions %>%
-    mutate(prediction = as.factor(if_else(filter_50_binarized >= 0.5, 1, 0))) %>%
-    select(image_name, labels, prediction, filter_50_binarized)
-write_csv(preds, './out/seg_50_binarized_predictions.csv')
+compute_aupr(image_level$filter_0_random, image_level$label, 'PR: Segmentations: zero all pixels < 0 - Shuffled Labels')
+compute_auroc(image_level$filter_0_random, image_level$label, 'ROC: Segmentations: zero all pixels < 0 - Shuffled Labels')
+confusion_matrix(image_level, 'filter_0_random')
+```
+
+
+### Segmentations: zero all pixels < 50
+
+```{r}
+compute_aupr(image_level$filter_50, image_level$label, 'PR: Segmentations: zero all pixels < 50')
+compute_auroc(image_level$filter_50, image_level$label, 'ROC: Segmentations: zero all pixels < 50')
+confusion_matrix(image_level, 'filter_50')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_50_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 50 and skeletonize')
-compute_aupr(race_predictions$filter_50_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 50 and skeletonize')
-confusion_matrix(race_predictions, 'filter_50_skeletonized')
+compute_aupr(image_level$filter_50_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 50 and binarize')
+compute_auroc(image_level$filter_50_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 50 and binarize')
+confusion_matrix(image_level, 'filter_0_binarized')
 ```
 
 ```{r}
-preds <- race_predictions %>%
-    mutate(prediction = as.factor(if_else(filter_50_skeletonized >= 0.5, 1, 0))) %>%
-    select(image_name, labels, prediction, filter_50_skeletonized)
-write_csv(preds, './out/seg_50_skeletonized_predictions.csv')
+compute_aupr(image_level$filter_50_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 50 and skeletonize')
+compute_auroc(image_level$filter_50_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 50 and skeletonize')
+confusion_matrix(image_level, 'filter_50_skeletonized')
 ```
 
 
 
-## Segmentations: zero all pixels < 100
-![](out/figures/segmentation_100.png)
+### Segmentations: zero all pixels < 100
+
 ```{r}
-compute_auroc(race_predictions$filter_100, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 100')
-compute_aupr(race_predictions$filter_100, race_predictions$labels, 'PR: Segmentations: zero all pixels < 100')
-confusion_matrix(race_predictions, 'filter_100')
+compute_aupr(image_level$filter_100, image_level$label, 'PR: Segmentations: zero all pixels < 100')
+compute_auroc(image_level$filter_100, image_level$label, 'ROC: Segmentations: zero all pixels < 100')
+confusion_matrix(image_level, 'filter_100')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_100_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 100 and binarize')
-compute_aupr(race_predictions$filter_100_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 100 and binarize')
-confusion_matrix(race_predictions, 'filter_100_binarized')
+compute_aupr(image_level$filter_100_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 100 and binarize')
+compute_auroc(image_level$filter_100_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 100 and binarize')
+confusion_matrix(image_level, 'filter_100_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_100_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 100 and skeletonize')
-compute_aupr(race_predictions$filter_100_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 100 and skeletonize')
-confusion_matrix(race_predictions, 'filter_100_skeletonized')
-```
-
-
-
-
-## Segmentations: zero all pixels < 150
-![](out/figures/segmentation_150.png)
-```{r}
-compute_auroc(race_predictions$filter_150, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 150')
-compute_aupr(race_predictions$filter_150, race_predictions$labels, 'PR: Segmentations: zero all pixels < 150')
-confusion_matrix(race_predictions, 'filter_150')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_150_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 150 and binarize')
-compute_aupr(race_predictions$filter_150_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 150 and binarize')
-confusion_matrix(race_predictions, 'filter_150_binarized')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_150_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 150 and skeletonize')
-compute_aupr(race_predictions$filter_150_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 150 and skeletonize')
-confusion_matrix(race_predictions, 'filter_150_skeletonized')
+compute_aupr(image_level$filter_100_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 100 and skeletonize')
+compute_auroc(image_level$filter_100_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 100 and skeletonize')
+confusion_matrix(image_level, 'filter_100_skeletonized')
 ```
 
 
 
+### Segmentations: zero all pixels < 150
 
-## Segmentations: zero all pixels < 200
-![](out/figures/segmentation_200.png)
 ```{r}
-compute_auroc(race_predictions$filter_200, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 200')
-compute_aupr(race_predictions$filter_200, race_predictions$labels, 'PR: Segmentations: zero all pixels < 200')
-confusion_matrix(race_predictions, 'filter_200')
+compute_aupr(image_level$filter_150, image_level$label, 'PR: Segmentations: zero all pixels < 150')
+compute_auroc(image_level$filter_150, image_level$label, 'ROC: Segmentations: zero all pixels < 150')
+confusion_matrix(image_level, 'filter_150')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_200_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 200 and binarize')
-compute_aupr(race_predictions$filter_200_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 200 and binarize')
-confusion_matrix(race_predictions, 'filter_200_binarized')
+compute_aupr(image_level$filter_150_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 150 and binarize')
+compute_auroc(image_level$filter_150_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 150 and binarize')
+confusion_matrix(image_level, 'filter_150_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_200_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 200 and skeletonize')
-compute_aupr(race_predictions$filter_200_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 200 and skeletonize')
-confusion_matrix(race_predictions, 'filter_200_skeletonized')
-```
-
-
-
-
-
-
-## Segmentations: zero all pixels < 210
-![](out/figures/segmentation_210.png)
-```{r}
-compute_auroc(race_predictions$filter_210, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 210')
-compute_aupr(race_predictions$filter_210, race_predictions$labels, 'PR: Segmentations: zero all pixels < 210')
-confusion_matrix(race_predictions, 'filter_210')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_210_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 210 and binarize')
-compute_aupr(race_predictions$filter_210_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 210 and binarize')
-confusion_matrix(race_predictions, 'filter_210_binarized')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_210_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 210 and skeletonize')
-compute_aupr(race_predictions$filter_210_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 210 and skeletonize')
-confusion_matrix(race_predictions, 'filter_210_skeletonized')
+compute_aupr(image_level$filter_150_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 150 and skeletonize')
+compute_auroc(image_level$filter_150_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 150 and skeletonize')
+confusion_matrix(image_level, 'filter_150_skeletonized')
 ```
 
 
 
+### Segmentations: zero all pixels < 200
 
-
-## Segmentations: zero all pixels < 220
-![](out/figures/segmentation_220.png)
 ```{r}
-compute_auroc(race_predictions$filter_220, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 220')
-compute_aupr(race_predictions$filter_220, race_predictions$labels, 'PR: Segmentations: zero all pixels < 220')
-confusion_matrix(race_predictions, 'filter_220')
+compute_aupr(image_level$filter_200, image_level$label, 'PR: Segmentations: zero all pixels < 200')
+compute_auroc(image_level$filter_200, image_level$label, 'ROC: Segmentations: zero all pixels < 200')
+confusion_matrix(image_level, 'filter_200')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_220_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 220 and binarize')
-compute_aupr(race_predictions$filter_220_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 220 and binarize')
-confusion_matrix(race_predictions, 'filter_220_binarized')
+compute_aupr(image_level$filter_200_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 200 and binarize')
+compute_auroc(image_level$filter_200_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 200 and binarize')
+confusion_matrix(image_level, 'filter_200_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_220_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 220 and skeletonize')
-compute_aupr(race_predictions$filter_220_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 220 and skeletonize')
-confusion_matrix(race_predictions, 'filter_220_skeletonized')
-```
-
-
-
-## Segmentations: zero all pixels < 230
-![](out/figures/segmentation_230.png)
-```{r}
-compute_auroc(race_predictions$filter_230, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 230')
-compute_aupr(race_predictions$filter_230, race_predictions$labels, 'PR: Segmentations: zero all pixels < 230')
-confusion_matrix(race_predictions, 'filter_230')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_230_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 230 and binarize')
-compute_aupr(race_predictions$filter_230_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 230 and binarize')
-confusion_matrix(race_predictions, 'filter_230_binarized')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_230_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 230 and skeletonize')
-compute_aupr(race_predictions$filter_230_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 230 and skeletonize')
-confusion_matrix(race_predictions, 'filter_230_skeletonized')
+compute_aupr(image_level$filter_200_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 200 and skeletonize')
+compute_auroc(image_level$filter_200_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 200 and skeletonize')
+confusion_matrix(image_level, 'filter_200_skeletonized')
 ```
 
 
 
-## Segmentations: zero all pixels < 240
-![](out/figures/segmentation_240.png)
+### Segmentations: zero all pixels < 210
+
 ```{r}
-compute_auroc(race_predictions$filter_240, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 240')
-compute_aupr(race_predictions$filter_240, race_predictions$labels, 'PR: Segmentations: zero all pixels < 240')
-confusion_matrix(race_predictions, 'filter_240')
+compute_aupr(image_level$filter_210, image_level$label, 'PR: Segmentations: zero all pixels < 210')
+compute_auroc(image_level$filter_210, image_level$label, 'ROC: Segmentations: zero all pixels < 210')
+confusion_matrix(image_level, 'filter_210')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_240_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 240 and binarize')
-compute_aupr(race_predictions$filter_240_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 240 and binarize')
-confusion_matrix(race_predictions, 'filter_240_binarized')
+compute_aupr(image_level$filter_210_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 210 and binarize')
+compute_auroc(image_level$filter_210_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 210 and binarize')
+confusion_matrix(image_level, 'filter_210_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_240_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 240 and skeletonize')
-compute_aupr(race_predictions$filter_240_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 240 and skeletonize')
-confusion_matrix(race_predictions, 'filter_240_skeletonized')
-```
-
-
-
-## Segmentations: zero all pixels < 250
-![](out/figures/segmentation_250.png)
-```{r}
-compute_auroc(race_predictions$filter_250, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 250')
-compute_aupr(race_predictions$filter_250, race_predictions$labels, 'PR: Segmentations: zero all pixels < 250')
-confusion_matrix(race_predictions, 'filter_250')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_250_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 250 and binarize')
-compute_aupr(race_predictions$filter_250_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 250 and binarize')
-confusion_matrix(race_predictions, 'filter_250_binarized')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_250_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 250 and skeletonize')
-compute_aupr(race_predictions$filter_250_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 250 and skeletonize')
-confusion_matrix(race_predictions, 'filter_250_skeletonized')
-```
-
-
-## Segmentations: zero all pixels < 256
-![](out/figures/segmentation_256.png)
-```{r}
-compute_auroc(race_predictions$filter_256, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 256')
-compute_aupr(race_predictions$filter_256, race_predictions$labels, 'PR: Segmentations: zero all pixels < 256')
-confusion_matrix(race_predictions, 'filter_256')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_256_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 256 and binarize')
-compute_aupr(race_predictions$filter_256_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 256 and binarize')
-confusion_matrix(race_predictions, 'filter_256_binarized')
-```
-
-```{r}
-compute_auroc(race_predictions$filter_256_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 256 and skeletonize')
-compute_aupr(race_predictions$filter_256_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 256 and skeletonize')
-confusion_matrix(race_predictions, 'filter_256_skeletonized')
+compute_aupr(image_level$filter_210_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 210 and skeletonize')
+compute_auroc(image_level$filter_210_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 210 and skeletonize')
+confusion_matrix(image_level, 'filter_210_skeletonized')
 ```
 
 
 
+### Segmentations: zero all pixels < 220
 
-
-
-
-
-## Segmentations: zero all pixels > 10
-<!-- ![](out/figures/segmentation_reverse_10.png) -->
 ```{r}
-compute_auroc(race_predictions$filter_10, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 10')
-compute_aupr(race_predictions$filter_10, race_predictions$labels, 'PR: Segmentations: zero all pixels < 10')
-confusion_matrix(race_predictions, 'filter_10')
+compute_aupr(image_level$filter_220, image_level$label, 'PR: Segmentations: zero all pixels < 220')
+compute_auroc(image_level$filter_220, image_level$label, 'ROC: Segmentations: zero all pixels < 220')
+confusion_matrix(image_level, 'filter_220')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_10_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 10 and binarize')
-compute_aupr(race_predictions$filter_10_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 10 and binarize')
-confusion_matrix(race_predictions, 'filter_10_binarized')
+compute_aupr(image_level$filter_220_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 220 and binarize')
+compute_auroc(image_level$filter_220_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 220 and binarize')
+confusion_matrix(image_level, 'filter_220_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_10_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 10 and skeletonize')
-compute_aupr(race_predictions$filter_10_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 10 and skeletonize')
-confusion_matrix(race_predictions, 'filter_10_skeletonized')
+compute_aupr(image_level$filter_220_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 220 and skeletonize')
+compute_auroc(image_level$filter_220_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 220 and skeletonize')
+confusion_matrix(image_level, 'filter_220_skeletonized')
 ```
 
 
 
-## Segmentations: zero all pixels < 75 and > 150
-<!-- ![](out/figures/segmentation_75_150.png) -->
+### Segmentations: zero all pixels < 230
+
 ```{r}
-compute_auroc(race_predictions$filter_75, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 75 and > 150')
-compute_aupr(race_predictions$filter_75, race_predictions$labels, 'PR: Segmentations: zero all pixels < 75 and > 150')
-confusion_matrix(race_predictions, 'filter_75')
+compute_aupr(image_level$filter_230, image_level$label, 'PR: Segmentations: zero all pixels < 230')
+compute_auroc(image_level$filter_230, image_level$label, 'ROC: Segmentations: zero all pixels < 230')
+confusion_matrix(image_level, 'filter_230')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_75_binarized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 75 and > 150 and binarize')
-compute_aupr(race_predictions$filter_75_binarized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 75 and > 150 and binarize')
-confusion_matrix(race_predictions, 'filter_75_binarized')
+compute_aupr(image_level$filter_230_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 230 and binarize')
+compute_auroc(image_level$filter_230_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 230 and binarize')
+confusion_matrix(image_level, 'filter_230_binarized')
 ```
 
 ```{r}
-compute_auroc(race_predictions$filter_75_skeletonized, race_predictions$labels, 'ROC: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
-compute_aupr(race_predictions$filter_75_skeletonized, race_predictions$labels, 'PR: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
-confusion_matrix(race_predictions, 'filter_75_skeletonized')
+compute_aupr(image_level$filter_230_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 230 and skeletonize')
+compute_auroc(image_level$filter_230_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 230 and skeletonize')
+confusion_matrix(image_level, 'filter_230_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 240
+
+```{r}
+compute_aupr(image_level$filter_240, image_level$label, 'PR: Segmentations: zero all pixels < 240')
+compute_auroc(image_level$filter_240, image_level$label, 'ROC: Segmentations: zero all pixels < 240')
+confusion_matrix(image_level, 'filter_240')
+```
+
+```{r}
+compute_aupr(image_level$filter_240_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 240 and binarize')
+compute_auroc(image_level$filter_240_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 240 and binarize')
+confusion_matrix(image_level, 'filter_240_binarized')
+```
+
+```{r}
+compute_aupr(image_level$filter_240_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 240 and skeletonize')
+compute_auroc(image_level$filter_240_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 240 and skeletonize')
+confusion_matrix(image_level, 'filter_240_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 250
+
+```{r}
+compute_aupr(image_level$filter_250, image_level$label, 'PR: Segmentations: zero all pixels < 250')
+compute_auroc(image_level$filter_250, image_level$label, 'ROC: Segmentations: zero all pixels < 250')
+confusion_matrix(image_level, 'filter_250')
+```
+
+```{r}
+compute_aupr(image_level$filter_250_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 250 and binarize')
+compute_auroc(image_level$filter_250_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 250 and binarize')
+confusion_matrix(image_level, 'filter_250_binarized')
+```
+
+```{r}
+compute_aupr(image_level$filter_250_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 250 and skeletonize')
+compute_auroc(image_level$filter_250_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 250 and skeletonize')
+confusion_matrix(image_level, 'filter_250_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 257
+
+```{r}
+compute_aupr(image_level$filter_257, image_level$label, 'PR: Segmentations: zero all pixels < 257')
+compute_auroc(image_level$filter_257, image_level$label, 'ROC: Segmentations: zero all pixels < 257')
+confusion_matrix(image_level, 'filter_257')
+```
+
+```{r}
+compute_aupr(image_level$filter_257_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 257 and binarize')
+compute_auroc(image_level$filter_257_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 257 and binarize')
+confusion_matrix(image_level, 'filter_257_binarized')
+```
+
+```{r}
+compute_aupr(image_level$filter_257_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 257 and skeletonize')
+compute_auroc(image_level$filter_257_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 257 and skeletonize')
+confusion_matrix(image_level, 'filter_257_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels > 10
+
+```{r}
+compute_aupr(image_level$filter_10, image_level$label, 'PR: Segmentations: zero all pixels < 10')
+compute_auroc(image_level$filter_10, image_level$label, 'ROC: Segmentations: zero all pixels < 10')
+confusion_matrix(image_level, 'filter_10')
+```
+
+```{r}
+compute_aupr(image_level$filter_10_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 10 and binarize')
+compute_auroc(image_level$filter_10_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 10 and binarize')
+confusion_matrix(image_level, 'filter_10_binarized')
+```
+
+```{r}
+compute_aupr(image_level$filter_10_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 10 and skeletonize')
+compute_auroc(image_level$filter_10_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 10 and skeletonize')
+confusion_matrix(image_level, 'filter_10_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 75 and > 150
+
+```{r}
+compute_aupr(image_level$filter_75, image_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150')
+compute_auroc(image_level$filter_75, image_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150')
+confusion_matrix(image_level, 'filter_75')
+```
+
+```{r}
+compute_aupr(image_level$filter_75_binarized, image_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150 and binarize')
+compute_auroc(image_level$filter_75_binarized, image_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150 and binarize')
+confusion_matrix(image_level, 'filter_75_binarized')
+```
+
+```{r}
+compute_aupr(image_level$filter_75_skeletonized, image_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
+compute_auroc(image_level$filter_75_skeletonized, image_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
+confusion_matrix(image_level, 'filter_75_skeletonized')
+```
+
+
+
+
+
+
+
+
+
+
+
+# Subject-level Analysis
+
+### RetCam Images
+
+```{r}
+compute_aupr(subject_level$retcam, subject_level$label, 'PR: Raw RetCam Images')
+compute_auroc(subject_level$retcam, subject_level$label, 'ROC: Raw RetCam Images')
+confusion_matrix(subject_level, 'retcam')
+```
+
+```{r}
+compute_aupr(subject_level$retcam_random, subject_level$label, 'PR: Raw RetCam Images - Shuffled Labels')
+compute_auroc(subject_level$retcam_random, subject_level$label, 'ROC: Raw RetCam Images - Shuffled Labels')
+confusion_matrix(subject_level, 'retcam_random')
+```
+
+
+
+### Segmentations: zero all pixels < 0
+
+```{r}
+compute_aupr(subject_level$filter_0, subject_level$label, 'PR: Segmentations: zero all pixels < 0')
+compute_auroc(subject_level$filter_0, subject_level$label, 'ROC: Segmentations: zero all pixels < 0')
+confusion_matrix(subject_level, 'filter_0')
+```
+
+```{r}
+compute_aupr(subject_level$filter_0_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 0 and binarize')
+compute_auroc(subject_level$filter_0_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 0 and binarize')
+confusion_matrix(subject_level, 'filter_0_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_0_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 0 and skeletonize')
+compute_auroc(subject_level$filter_0_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 0 and skeletonize')
+confusion_matrix(subject_level, 'filter_0_skeletonized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_0_random, subject_level$label, 'PR: Segmentations: zero all pixels < 0 - Shuffled Labels')
+compute_auroc(subject_level$filter_0_random, subject_level$label, 'ROC: Segmentations: zero all pixels < 0 - Shuffled Labels')
+confusion_matrix(subject_level, 'filter_0_random')
+```
+
+
+### Segmentations: zero all pixels < 50
+
+```{r}
+compute_aupr(subject_level$filter_50, subject_level$label, 'PR: Segmentations: zero all pixels < 50')
+compute_auroc(subject_level$filter_50, subject_level$label, 'ROC: Segmentations: zero all pixels < 50')
+confusion_matrix(subject_level, 'filter_50')
+```
+
+```{r}
+compute_aupr(subject_level$filter_50_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 50 and binarize')
+compute_auroc(subject_level$filter_50_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 50 and binarize')
+confusion_matrix(subject_level, 'filter_0_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_50_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 50 and skeletonize')
+compute_auroc(subject_level$filter_50_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 50 and skeletonize')
+confusion_matrix(subject_level, 'filter_50_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 100
+
+```{r}
+compute_aupr(subject_level$filter_100, subject_level$label, 'PR: Segmentations: zero all pixels < 100')
+compute_auroc(subject_level$filter_100, subject_level$label, 'ROC: Segmentations: zero all pixels < 100')
+confusion_matrix(subject_level, 'filter_100')
+```
+
+```{r}
+compute_aupr(subject_level$filter_100_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 100 and binarize')
+compute_auroc(subject_level$filter_100_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 100 and binarize')
+confusion_matrix(subject_level, 'filter_100_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_100_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 100 and skeletonize')
+compute_auroc(subject_level$filter_100_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 100 and skeletonize')
+confusion_matrix(subject_level, 'filter_100_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 150
+
+```{r}
+compute_aupr(subject_level$filter_150, subject_level$label, 'PR: Segmentations: zero all pixels < 150')
+compute_auroc(subject_level$filter_150, subject_level$label, 'ROC: Segmentations: zero all pixels < 150')
+confusion_matrix(subject_level, 'filter_150')
+```
+
+```{r}
+compute_aupr(subject_level$filter_150_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 150 and binarize')
+compute_auroc(subject_level$filter_150_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 150 and binarize')
+confusion_matrix(subject_level, 'filter_150_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_150_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 150 and skeletonize')
+compute_auroc(subject_level$filter_150_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 150 and skeletonize')
+confusion_matrix(subject_level, 'filter_150_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 200
+
+```{r}
+compute_aupr(subject_level$filter_200, subject_level$label, 'PR: Segmentations: zero all pixels < 200')
+compute_auroc(subject_level$filter_200, subject_level$label, 'ROC: Segmentations: zero all pixels < 200')
+confusion_matrix(subject_level, 'filter_200')
+```
+
+```{r}
+compute_aupr(subject_level$filter_200_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 200 and binarize')
+compute_auroc(subject_level$filter_200_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 200 and binarize')
+confusion_matrix(subject_level, 'filter_200_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_200_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 200 and skeletonize')
+compute_auroc(subject_level$filter_200_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 200 and skeletonize')
+confusion_matrix(subject_level, 'filter_200_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 210
+
+```{r}
+compute_aupr(subject_level$filter_210, subject_level$label, 'PR: Segmentations: zero all pixels < 210')
+compute_auroc(subject_level$filter_210, subject_level$label, 'ROC: Segmentations: zero all pixels < 210')
+confusion_matrix(subject_level, 'filter_210')
+```
+
+```{r}
+compute_aupr(subject_level$filter_210_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 210 and binarize')
+compute_auroc(subject_level$filter_210_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 210 and binarize')
+confusion_matrix(subject_level, 'filter_210_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_210_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 210 and skeletonize')
+compute_auroc(subject_level$filter_210_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 210 and skeletonize')
+confusion_matrix(subject_level, 'filter_210_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 220
+
+```{r}
+compute_aupr(subject_level$filter_220, subject_level$label, 'PR: Segmentations: zero all pixels < 220')
+compute_auroc(subject_level$filter_220, subject_level$label, 'ROC: Segmentations: zero all pixels < 220')
+confusion_matrix(subject_level, 'filter_220')
+```
+
+```{r}
+compute_aupr(subject_level$filter_220_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 220 and binarize')
+compute_auroc(subject_level$filter_220_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 220 and binarize')
+confusion_matrix(subject_level, 'filter_220_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_220_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 220 and skeletonize')
+compute_auroc(subject_level$filter_220_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 220 and skeletonize')
+confusion_matrix(subject_level, 'filter_220_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 230
+
+```{r}
+compute_aupr(subject_level$filter_230, subject_level$label, 'PR: Segmentations: zero all pixels < 230')
+compute_auroc(subject_level$filter_230, subject_level$label, 'ROC: Segmentations: zero all pixels < 230')
+confusion_matrix(subject_level, 'filter_230')
+```
+
+```{r}
+compute_aupr(subject_level$filter_230_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 230 and binarize')
+compute_auroc(subject_level$filter_230_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 230 and binarize')
+confusion_matrix(subject_level, 'filter_230_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_230_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 230 and skeletonize')
+compute_auroc(subject_level$filter_230_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 230 and skeletonize')
+confusion_matrix(subject_level, 'filter_230_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 240
+
+```{r}
+compute_aupr(subject_level$filter_240, subject_level$label, 'PR: Segmentations: zero all pixels < 240')
+compute_auroc(subject_level$filter_240, subject_level$label, 'ROC: Segmentations: zero all pixels < 240')
+confusion_matrix(subject_level, 'filter_240')
+```
+
+```{r}
+compute_aupr(subject_level$filter_240_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 240 and binarize')
+compute_auroc(subject_level$filter_240_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 240 and binarize')
+confusion_matrix(subject_level, 'filter_240_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_240_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 240 and skeletonize')
+compute_auroc(subject_level$filter_240_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 240 and skeletonize')
+confusion_matrix(subject_level, 'filter_240_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 250
+
+```{r}
+compute_aupr(subject_level$filter_250, subject_level$label, 'PR: Segmentations: zero all pixels < 250')
+compute_auroc(subject_level$filter_250, subject_level$label, 'ROC: Segmentations: zero all pixels < 250')
+confusion_matrix(subject_level, 'filter_250')
+```
+
+```{r}
+compute_aupr(subject_level$filter_250_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 250 and binarize')
+compute_auroc(subject_level$filter_250_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 250 and binarize')
+confusion_matrix(subject_level, 'filter_250_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_250_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 250 and skeletonize')
+compute_auroc(subject_level$filter_250_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 250 and skeletonize')
+confusion_matrix(subject_level, 'filter_250_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 257
+
+```{r}
+compute_aupr(subject_level$filter_257, subject_level$label, 'PR: Segmentations: zero all pixels < 257')
+compute_auroc(subject_level$filter_257, subject_level$label, 'ROC: Segmentations: zero all pixels < 257')
+confusion_matrix(subject_level, 'filter_257')
+```
+
+```{r}
+compute_aupr(subject_level$filter_257_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 257 and binarize')
+compute_auroc(subject_level$filter_257_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 257 and binarize')
+confusion_matrix(subject_level, 'filter_257_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_257_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 257 and skeletonize')
+compute_auroc(subject_level$filter_257_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 257 and skeletonize')
+confusion_matrix(subject_level, 'filter_257_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels > 10
+
+```{r}
+compute_aupr(subject_level$filter_10, subject_level$label, 'PR: Segmentations: zero all pixels < 10')
+compute_auroc(subject_level$filter_10, subject_level$label, 'ROC: Segmentations: zero all pixels < 10')
+confusion_matrix(subject_level, 'filter_10')
+```
+
+```{r}
+compute_aupr(subject_level$filter_10_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 10 and binarize')
+compute_auroc(subject_level$filter_10_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 10 and binarize')
+confusion_matrix(subject_level, 'filter_10_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_10_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 10 and skeletonize')
+compute_auroc(subject_level$filter_10_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 10 and skeletonize')
+confusion_matrix(subject_level, 'filter_10_skeletonized')
+```
+
+
+
+### Segmentations: zero all pixels < 75 and > 150
+
+```{r}
+compute_aupr(subject_level$filter_75, subject_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150')
+compute_auroc(subject_level$filter_75, subject_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150')
+confusion_matrix(subject_level, 'filter_75')
+```
+
+```{r}
+compute_aupr(subject_level$filter_75_binarized, subject_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150 and binarize')
+compute_auroc(subject_level$filter_75_binarized, subject_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150 and binarize')
+confusion_matrix(subject_level, 'filter_75_binarized')
+```
+
+```{r}
+compute_aupr(subject_level$filter_75_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
+compute_auroc(subject_level$filter_75_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
+confusion_matrix(subject_level, 'filter_75_skeletonized')
 ```
