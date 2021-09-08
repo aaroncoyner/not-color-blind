@@ -107,7 +107,6 @@ summary(melted_data)
 ## represented
 ## take the third partition (test) and keep only one image from each subject
 set.seed(1337)
-
 partitioned_data <- melted_data %>%
     partition(p = c(0.5, 0.2),
               id_col = 'subject_id',
@@ -125,62 +124,92 @@ test_data <- partitioned_data[[3]]
 ```
 
 
-
 ```{r}
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %>%
+    kable(caption = 'All Data')
+
+
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
     filter(subject_id %in% train_data$subject_id) %>%
     group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %>%
+    kable(caption = 'Train Data')
+
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% val_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %>%
+    kable(caption = 'Validation Data')
+
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% test_data$subject_id) %>%
+    group_by(race) %>%
+    summarize(n = n(),
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %>%
+    kable(caption = 'Test Data')
+```
+
+```{r}
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
     t.test(gestational_age_weeks ~ race, data = .)
-```
 
-
-```{r}
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
-    group_by(race) %>%
-    summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %>%
-    kable(caption = 'All Data')
-
+    t.test(birth_weight ~ race, data = .)
 
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
     filter(subject_id %in% train_data$subject_id) %>%
-    group_by(race) %>%
-    summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %>%
-    kable(caption = 'Train Data')
+    t.test(gestational_age_weeks ~ race, data = .)
 
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% train_data$subject_id) %>%
+    t.test(birth_weight ~ race, data = .)
 
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
     filter(subject_id %in% val_data$subject_id) %>%
-    group_by(race) %>%
-    summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %>%
-    kable(caption = 'Validation Data')
+    t.test(gestational_age_weeks ~ race, data = .)
 
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% val_data$subject_id) %>%
+    t.test(birth_weight ~ race, data = .)
 
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
     filter(subject_id %in% test_data$subject_id) %>%
-    group_by(race) %>%
-    summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %>%
-    kable(caption = 'Test Data')
+    t.test(gestational_age_weeks ~ race, data = .)
+
+clean_data %>%
+    distinct(subject_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% test_data$subject_id) %>%
+    t.test(birth_weight ~ race, data = .)
 ```
 
 ```{r}
@@ -188,8 +217,8 @@ clean_data %>%
     distinct(subject_visit_id, .keep_all = TRUE) %>%
     group_by(race) %>%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %>%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %>%
     kable(caption = 'All Data')
 
 
@@ -198,8 +227,8 @@ clean_data %>%
     filter(subject_id %in% train_data$subject_id) %>%
     group_by(race) %>%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %>%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %>%
     kable(caption = 'Train Data')
 
 
@@ -208,8 +237,8 @@ clean_data %>%
     filter(subject_id %in% val_data$subject_id) %>%
     group_by(race) %>%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %>%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %>%
     kable(caption = 'Validation Data')
 
 
@@ -218,9 +247,30 @@ clean_data %>%
     filter(subject_id %in% test_data$subject_id) %>%
     group_by(race) %>%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %>%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %>%
     kable(caption = 'Test Data')
+```
+
+```{r}
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    t.test(pma_weeks ~ race, data = .)
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% train_data$subject_id) %>%
+    t.test(pma_weeks ~ race, data = .)
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% val_data$subject_id) %>%
+    t.test(pma_weeks ~ race, data = .)
+
+clean_data %>%
+    distinct(subject_visit_id, .keep_all = TRUE) %>%
+    filter(subject_id %in% test_data$subject_id) %>%
+    t.test(pma_weeks ~ race, data = .)
 ```
 
 
@@ -293,4 +343,3 @@ file_copy(paste(src, test_data$segmentation_location, sep = '/'),
           paste(dst, test_data$race, test_data$segmentation_location, sep = '/'),
           overwrite = TRUE)
 ```
-

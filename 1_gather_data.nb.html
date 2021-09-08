@@ -288,7 +288,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Create Datasets</h1>
 <h4 class="author">Author: Aaron S Coyner, PhD</h4>
-<h4 class="date">Last update: 2021-08-28</h4>
+<h4 class="date">Last update: 2021-09-02</h4>
 
 </div>
 
@@ -493,7 +493,7 @@ summary(melted_data)</code></pre>
 <h2>Partition data</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgc2V0IHNlZWQgZm9yIHJlcHJvZHVjaWJpbGl0eVxuIyMgcGFydGl0aW9uIGRhdGEgaW50byB0aHJlZSBkYXRhc2V0cywgcm91Z2hseSA1MC81LzQ1LCBrZWVwaW5nIHN1YmplY3RzIG11dHVhbGx5IGV4Y2x1c2l2ZSB3aGlsZVxuIyMgYXR0ZW1wdGluZyB0byBtYWludGFpbiByYWNlIGRpc3RyaWJ1dGlvblxuIyMgdGFrZSB0aGUgZmlyc3QgcGFydGl0aW9uICh0cmFpbikgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseVxuIyMgcmVwcmVzZW50ZWRcbiMjIHNodWZmbGUgdGhlIHRyYWluaW5nIGRhdGEgbGFiZWxzIGZvciBhIHNlcGFyYXRlIGV4cGVyaW1lbnRcbiMjIHRha2UgdGhlIHNlY29uZCBwYXJ0aXRpb24gKHZhbCkgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseVxuIyMgcmVwcmVzZW50ZWRcbiMjIHRha2UgdGhlIHRoaXJkIHBhcnRpdGlvbiAodGVzdCkgYW5kIGtlZXAgb25seSBvbmUgaW1hZ2UgZnJvbSBlYWNoIHN1YmplY3RcbnNldC5zZWVkKDEzMzcpXG5cbnBhcnRpdGlvbmVkX2RhdGEgPC0gbWVsdGVkX2RhdGEgJT4lXG4gICAgcGFydGl0aW9uKHAgPSBjKDAuNSwgMC4yKSxcbiAgICAgICAgICAgICAgaWRfY29sID0gJ3N1YmplY3RfaWQnLFxuICAgICAgICAgICAgICBjYXRfY29sID0gJ3JhY2UnKVxuXG50cmFpbl9kYXRhIDwtIHBhcnRpdGlvbmVkX2RhdGFbWzFdXVxuXG50cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMgPC0gdHJhaW5fZGF0YSAlPiVcbiAgICBzYW1wbGVfZnJhYygpICU+JVxuICAgIG11dGF0ZShyYWNlID0gYyhyZXAoJ2JsYWNrJywgZmxvb3IobnJvdyh0cmFpbl9kYXRhKSAvIDIpKSwgcmVwKCd3aGl0ZScsIGNlaWxpbmcobnJvdyh0cmFpbl9kYXRhKSAvIDIpKSkpXG5cbnZhbF9kYXRhIDwtIHBhcnRpdGlvbmVkX2RhdGFbWzJdXVxuXG50ZXN0X2RhdGEgPC0gcGFydGl0aW9uZWRfZGF0YVtbM11dXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgc2V0IHNlZWQgZm9yIHJlcHJvZHVjaWJpbGl0eVxuIyMgcGFydGl0aW9uIGRhdGEgaW50byB0aHJlZSBkYXRhc2V0cywgcm91Z2hseSA1MC81LzQ1LCBrZWVwaW5nIHN1YmplY3RzIG11dHVhbGx5IGV4Y2x1c2l2ZSB3aGlsZVxuIyMgYXR0ZW1wdGluZyB0byBtYWludGFpbiByYWNlIGRpc3RyaWJ1dGlvblxuIyMgdGFrZSB0aGUgZmlyc3QgcGFydGl0aW9uICh0cmFpbikgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseVxuIyMgcmVwcmVzZW50ZWRcbiMjIHNodWZmbGUgdGhlIHRyYWluaW5nIGRhdGEgbGFiZWxzIGZvciBhIHNlcGFyYXRlIGV4cGVyaW1lbnRcbiMjIHRha2UgdGhlIHNlY29uZCBwYXJ0aXRpb24gKHZhbCkgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseVxuIyMgcmVwcmVzZW50ZWRcbiMjIHRha2UgdGhlIHRoaXJkIHBhcnRpdGlvbiAodGVzdCkgYW5kIGtlZXAgb25seSBvbmUgaW1hZ2UgZnJvbSBlYWNoIHN1YmplY3RcbnNldC5zZWVkKDEzMzcpXG5wYXJ0aXRpb25lZF9kYXRhIDwtIG1lbHRlZF9kYXRhICU+JVxuICAgIHBhcnRpdGlvbihwID0gYygwLjUsIDAuMiksXG4gICAgICAgICAgICAgIGlkX2NvbCA9ICdzdWJqZWN0X2lkJyxcbiAgICAgICAgICAgICAgY2F0X2NvbCA9ICdyYWNlJylcblxudHJhaW5fZGF0YSA8LSBwYXJ0aXRpb25lZF9kYXRhW1sxXV1cblxudHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzIDwtIHRyYWluX2RhdGEgJT4lXG4gICAgc2FtcGxlX2ZyYWMoKSAlPiVcbiAgICBtdXRhdGUocmFjZSA9IGMocmVwKCdibGFjaycsIGZsb29yKG5yb3codHJhaW5fZGF0YSkgLyAyKSksIHJlcCgnd2hpdGUnLCBjZWlsaW5nKG5yb3codHJhaW5fZGF0YSkgLyAyKSkpKVxuXG52YWxfZGF0YSA8LSBwYXJ0aXRpb25lZF9kYXRhW1syXV1cblxudGVzdF9kYXRhIDwtIHBhcnRpdGlvbmVkX2RhdGFbWzNdXVxuYGBgIn0= -->
 <pre class="r"><code>## set seed for reproducibility
 ## partition data into three datasets, roughly 50/5/45, keeping subjects mutually exclusive while
 ## attempting to maintain race distribution
@@ -504,7 +504,6 @@ summary(melted_data)</code></pre>
 ## represented
 ## take the third partition (test) and keep only one image from each subject
 set.seed(1337)
-
 partitioned_data &lt;- melted_data %&gt;%
     partition(p = c(0.5, 0.2),
               id_col = &#39;subject_id&#39;,
@@ -524,39 +523,15 @@ test_data &lt;- partitioned_data[[3]]</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRyYWluX2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgZ3JvdXBfYnkocmFjZSkgJT4lXG4gICAgdC50ZXN0KGdlc3RhdGlvbmFsX2FnZV93ZWVrcyB+IHJhY2UsIGRhdGEgPSAuKVxuYGBgIn0= -->
-<pre class="r"><code>clean_data %&gt;%
-    distinct(subject_id, .keep_all = TRUE) %&gt;%
-    filter(subject_id %in% train_data$subject_id) %&gt;%
-    group_by(race) %&gt;%
-    t.test(gestational_age_weeks ~ race, data = .)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgYnkgcmFjZVxudCA9IDAuMTg1MTcsIGRmID0gOTQuODgsIHAtdmFsdWUgPSAwLjg1MzVcbmFsdGVybmF0aXZlIGh5cG90aGVzaXM6IHRydWUgZGlmZmVyZW5jZSBpbiBtZWFucyBiZXR3ZWVuIGdyb3VwIGJsYWNrIGFuZCBncm91cCB3aGl0ZSBpcyBub3QgZXF1YWwgdG8gMFxuOTUgcGVyY2VudCBjb25maWRlbmNlIGludGVydmFsOlxuIC0wLjc4Njk4NjYgIDAuOTQ4ODkxNFxuc2FtcGxlIGVzdGltYXRlczpcbm1lYW4gaW4gZ3JvdXAgYmxhY2sgbWVhbiBpbiBncm91cCB3aGl0ZSBcbiAgICAgICAgICAgMjcuNjY2NjcgICAgICAgICAgICAyNy41ODU3MSBcbiJ9 -->
-<pre><code>
-    Welch Two Sample t-test
-
-data:  gestational_age_weeks by race
-t = 0.18517, df = 94.88, p-value = 0.8535
-alternative hypothesis: true difference in means between group black and group white is not equal to 0
-95 percent confidence interval:
- -0.7869866  0.9488914
-sample estimates:
-mean in group black mean in group white 
-           27.66667            27.58571 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9nYSA9IG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSxcbiAgICAgICAgICAgICAgc2RfZ2EgPSBzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLFxuICAgICAgICAgICAgICBtZWFuX2J3ID0gbWVhbihiaXJ0aF93ZWlnaHQpLFxuICAgICAgICAgICAgICBzZF9idyA9IHNkKGJpcnRoX3dlaWdodCkpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnQWxsIERhdGEnKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksXG4gICAgICAgICAgICAgIHNkX2dhID0gcm91bmQoc2QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksXG4gICAgICAgICAgICAgIG1lYW5fYncgPSByb3VuZChtZWFuKGJpcnRoX3dlaWdodCksIDEpLFxuICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiVcbiAgICBrYWJsZShjYXB0aW9uID0gJ0FsbCBEYXRhJylcbmBgYCJ9 -->
 <pre class="r"><code>clean_data %&gt;%
     distinct(subject_id, .keep_all = TRUE) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %&gt;%
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %&gt;%
     kable(caption = &#39;All Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -578,18 +553,18 @@ mean in group black mean in group white
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">94</td>
-<td align="right">27.55319</td>
-<td align="right">2.298279</td>
-<td align="right">1013.691</td>
-<td align="right">324.8905</td>
+<td align="right">27.6</td>
+<td align="right">2.3</td>
+<td align="right">1013.7</td>
+<td align="right">324.9</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">151</td>
-<td align="right">27.65563</td>
-<td align="right">2.209212</td>
-<td align="right">1059.457</td>
-<td align="right">308.1608</td>
+<td align="right">27.7</td>
+<td align="right">2.2</td>
+<td align="right">1059.5</td>
+<td align="right">308.2</td>
 </tr>
 </tbody>
 </table>
@@ -597,7 +572,7 @@ mean in group black mean in group white
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIGdyb3VwX2J5KHJhY2UpICU+JVxuICAgIHN1bW1hcml6ZShuID0gbigpLFxuICAgICAgICAgICAgICBtZWFuX2dhID0gbWVhbihnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLFxuICAgICAgICAgICAgICBzZF9nYSA9IHNkKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksXG4gICAgICAgICAgICAgIG1lYW5fYncgPSBtZWFuKGJpcnRoX3dlaWdodCksXG4gICAgICAgICAgICAgIHNkX2J3ID0gc2QoYmlydGhfd2VpZ2h0KSkgJT4lXG4gICAga2FibGUoY2FwdGlvbiA9ICdUcmFpbiBEYXRhJylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIGdyb3VwX2J5KHJhY2UpICU+JVxuICAgIHN1bW1hcml6ZShuID0gbigpLFxuICAgICAgICAgICAgICBtZWFuX2dhID0gcm91bmQobWVhbihnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSxcbiAgICAgICAgICAgICAgc2RfZ2EgPSByb3VuZChzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSxcbiAgICAgICAgICAgICAgbWVhbl9idyA9IHJvdW5kKG1lYW4oYmlydGhfd2VpZ2h0KSwgMSksXG4gICAgICAgICAgICAgIHNkX2J3ID0gcm91bmQoc2QoYmlydGhfd2VpZ2h0KSwgMSkpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnVHJhaW4gRGF0YScpXG5gYGAifQ== -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -605,10 +580,10 @@ clean_data %&gt;%
     filter(subject_id %in% train_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %&gt;%
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %&gt;%
     kable(caption = &#39;Train Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -630,18 +605,18 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">45</td>
-<td align="right">27.66667</td>
-<td align="right">2.276361</td>
-<td align="right">1007.956</td>
-<td align="right">339.9989</td>
+<td align="right">27.7</td>
+<td align="right">2.3</td>
+<td align="right">1008.0</td>
+<td align="right">340.0</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">70</td>
-<td align="right">27.58571</td>
-<td align="right">2.306216</td>
-<td align="right">1061.143</td>
-<td align="right">320.2577</td>
+<td align="right">27.6</td>
+<td align="right">2.3</td>
+<td align="right">1061.1</td>
+<td align="right">320.3</td>
 </tr>
 </tbody>
 </table>
@@ -649,7 +624,7 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9nYSA9IG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSxcbiAgICAgICAgICAgICAgc2RfZ2EgPSBzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLFxuICAgICAgICAgICAgICBtZWFuX2J3ID0gbWVhbihiaXJ0aF93ZWlnaHQpLFxuICAgICAgICAgICAgICBzZF9idyA9IHNkKGJpcnRoX3dlaWdodCkpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnVmFsaWRhdGlvbiBEYXRhJylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksXG4gICAgICAgICAgICAgIHNkX2dhID0gcm91bmQoc2QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksXG4gICAgICAgICAgICAgIG1lYW5fYncgPSByb3VuZChtZWFuKGJpcnRoX3dlaWdodCksIDEpLFxuICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiVcbiAgICBrYWJsZShjYXB0aW9uID0gJ1ZhbGlkYXRpb24gRGF0YScpXG5gYGAifQ== -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -657,10 +632,10 @@ clean_data %&gt;%
     filter(subject_id %in% val_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %&gt;%
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %&gt;%
     kable(caption = &#39;Validation Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -682,18 +657,18 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">18</td>
-<td align="right">26.77778</td>
-<td align="right">2.556550</td>
-<td align="right">882.5556</td>
-<td align="right">277.2292</td>
+<td align="right">26.8</td>
+<td align="right">2.6</td>
+<td align="right">882.6</td>
+<td align="right">277.2</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">28</td>
-<td align="right">27.82143</td>
-<td align="right">1.963624</td>
-<td align="right">1030.7143</td>
-<td align="right">289.4700</td>
+<td align="right">27.8</td>
+<td align="right">2.0</td>
+<td align="right">1030.7</td>
+<td align="right">289.5</td>
 </tr>
 </tbody>
 </table>
@@ -701,7 +676,7 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgZ3JvdXBfYnkocmFjZSkgJT4lXG4gICAgc3VtbWFyaXplKG4gPSBuKCksXG4gICAgICAgICAgICAgIG1lYW5fZ2EgPSBtZWFuKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksXG4gICAgICAgICAgICAgIHNkX2dhID0gc2QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSxcbiAgICAgICAgICAgICAgbWVhbl9idyA9IG1lYW4oYmlydGhfd2VpZ2h0KSxcbiAgICAgICAgICAgICAgc2RfYncgPSBzZChiaXJ0aF93ZWlnaHQpKSAlPiVcbiAgICBrYWJsZShjYXB0aW9uID0gJ1Rlc3QgRGF0YScpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgZ3JvdXBfYnkocmFjZSkgJT4lXG4gICAgc3VtbWFyaXplKG4gPSBuKCksXG4gICAgICAgICAgICAgIG1lYW5fZ2EgPSByb3VuZChtZWFuKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksIDEpLFxuICAgICAgICAgICAgICBzZF9nYSA9IHJvdW5kKHNkKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksIDEpLFxuICAgICAgICAgICAgICBtZWFuX2J3ID0gcm91bmQobWVhbihiaXJ0aF93ZWlnaHQpLCAxKSxcbiAgICAgICAgICAgICAgc2RfYncgPSByb3VuZChzZChiaXJ0aF93ZWlnaHQpLCAxKSkgJT4lXG4gICAga2FibGUoY2FwdGlvbiA9ICdUZXN0IERhdGEnKVxuYGBgIn0= -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -709,10 +684,10 @@ clean_data %&gt;%
     filter(subject_id %in% test_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_ga = mean(gestational_age_weeks),
-              sd_ga = sd(gestational_age_weeks),
-              mean_bw = mean(birth_weight),
-              sd_bw = sd(birth_weight)) %&gt;%
+              mean_ga = round(mean(gestational_age_weeks), 1),
+              sd_ga = round(sd(gestational_age_weeks), 1),
+              mean_bw = round(mean(birth_weight), 1),
+              sd_bw = round(sd(birth_weight), 1)) %&gt;%
     kable(caption = &#39;Test Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -734,18 +709,18 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">27</td>
-<td align="right">27.88889</td>
-<td align="right">2.258886</td>
-<td align="right">1096.889</td>
-<td align="right">318.0103</td>
+<td align="right">27.9</td>
+<td align="right">2.3</td>
+<td align="right">1096.9</td>
+<td align="right">318.0</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">43</td>
-<td align="right">27.97674</td>
-<td align="right">2.272909</td>
-<td align="right">1098.512</td>
-<td align="right">305.2443</td>
+<td align="right">28.0</td>
+<td align="right">2.3</td>
+<td align="right">1098.5</td>
+<td align="right">305.2</td>
 </tr>
 </tbody>
 </table>
@@ -757,13 +732,167 @@ clean_data %&gt;%
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9wbWEgPSBtZWFuKHBtYV93ZWVrcyksXG4gICAgICAgICAgICAgIHNkX3BtYSA9IHNkKHBtYV93ZWVrcykpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnQWxsIERhdGEnKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICB0LnRlc3QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    t.test(gestational_age_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgYnkgcmFjZVxudCA9IC0wLjM0NDMxLCBkZiA9IDE5MS40OCwgcC12YWx1ZSA9IDAuNzMxXG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMC42ODkyNjI3ICAwLjQ4NDM4NzRcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDI3LjU1MzE5ICAgICAgICAgICAgMjcuNjU1NjMgXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  gestational_age_weeks by race
+t = -0.34431, df = 191.48, p-value = 0.731
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -0.6892627  0.4843874
+sample estimates:
+mean in group black mean in group white 
+           27.55319            27.65563 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICB0LnRlc3QoYmlydGhfd2VpZ2h0IH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    t.test(birth_weight ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBiaXJ0aF93ZWlnaHQgYnkgcmFjZVxudCA9IC0xLjA5MzQsIGRmID0gMTg5LjQ5LCBwLXZhbHVlID0gMC4yNzU2XG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMTI4LjMyNjI3ICAgMzYuNzk1MzRcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDEwMTMuNjkxICAgICAgICAgICAgMTA1OS40NTcgXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  birth_weight by race
+t = -1.0934, df = 189.49, p-value = 0.2756
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -128.32627   36.79534
+sample estimates:
+mean in group black mean in group white 
+           1013.691            1059.457 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRyYWluX2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgdC50ZXN0KGdlc3RhdGlvbmFsX2FnZV93ZWVrcyB+IHJhY2UsIGRhdGEgPSAuKVxuYGBgIn0= -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% train_data$subject_id) %&gt;%
+    t.test(gestational_age_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgYnkgcmFjZVxudCA9IDAuMTg1MTcsIGRmID0gOTQuODgsIHAtdmFsdWUgPSAwLjg1MzVcbmFsdGVybmF0aXZlIGh5cG90aGVzaXM6IHRydWUgZGlmZmVyZW5jZSBpbiBtZWFucyBiZXR3ZWVuIGdyb3VwIGJsYWNrIGFuZCBncm91cCB3aGl0ZSBpcyBub3QgZXF1YWwgdG8gMFxuOTUgcGVyY2VudCBjb25maWRlbmNlIGludGVydmFsOlxuIC0wLjc4Njk4NjYgIDAuOTQ4ODkxNFxuc2FtcGxlIGVzdGltYXRlczpcbm1lYW4gaW4gZ3JvdXAgYmxhY2sgbWVhbiBpbiBncm91cCB3aGl0ZSBcbiAgICAgICAgICAgMjcuNjY2NjcgICAgICAgICAgICAyNy41ODU3MSBcbiJ9 -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  gestational_age_weeks by race
+t = 0.18517, df = 94.88, p-value = 0.8535
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -0.7869866  0.9488914
+sample estimates:
+mean in group black mean in group white 
+           27.66667            27.58571 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRyYWluX2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgdC50ZXN0KGJpcnRoX3dlaWdodCB+IHJhY2UsIGRhdGEgPSAuKVxuYGBgIn0= -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% train_data$subject_id) %&gt;%
+    t.test(birth_weight ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBiaXJ0aF93ZWlnaHQgYnkgcmFjZVxudCA9IC0wLjgzNzQsIGRmID0gODkuODY0LCBwLXZhbHVlID0gMC40MDQ2XG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMTc5LjM3MjQ0ICAgNzIuOTk3ODRcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDEwMDcuOTU2ICAgICAgICAgICAgMTA2MS4xNDMgXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  birth_weight by race
+t = -0.8374, df = 89.864, p-value = 0.4046
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -179.37244   72.99784
+sample estimates:
+mean in group black mean in group white 
+           1007.956            1061.143 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHZhbF9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIHQudGVzdChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgfiByYWNlLCBkYXRhID0gLilcbmBgYCJ9 -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% val_data$subject_id) %&gt;%
+    t.test(gestational_age_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgYnkgcmFjZVxudCA9IC0xLjQ3NDcsIGRmID0gMjkuNjU0LCBwLXZhbHVlID0gMC4xNTA4XG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMi40ODk2NDA4ICAwLjQwMjMzOTNcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDI2Ljc3Nzc4ICAgICAgICAgICAgMjcuODIxNDMgXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  gestational_age_weeks by race
+t = -1.4747, df = 29.654, p-value = 0.1508
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -2.4896408  0.4023393
+sample estimates:
+mean in group black mean in group white 
+           26.77778            27.82143 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHZhbF9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIHQudGVzdChiaXJ0aF93ZWlnaHQgfiByYWNlLCBkYXRhID0gLilcbmBgYCJ9 -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% val_data$subject_id) %&gt;%
+    t.test(birth_weight ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBiaXJ0aF93ZWlnaHQgYnkgcmFjZVxudCA9IC0xLjczODYsIGRmID0gMzcuNTYzLCBwLXZhbHVlID0gMC4wOTAzMVxuYWx0ZXJuYXRpdmUgaHlwb3RoZXNpczogdHJ1ZSBkaWZmZXJlbmNlIGluIG1lYW5zIGJldHdlZW4gZ3JvdXAgYmxhY2sgYW5kIGdyb3VwIHdoaXRlIGlzIG5vdCBlcXVhbCB0byAwXG45NSBwZXJjZW50IGNvbmZpZGVuY2UgaW50ZXJ2YWw6XG4gLTMyMC43NDI3NyAgIDI0LjQyNTMxXG5zYW1wbGUgZXN0aW1hdGVzOlxubWVhbiBpbiBncm91cCBibGFjayBtZWFuIGluIGdyb3VwIHdoaXRlIFxuICAgICAgICAgICA4ODIuNTU1NiAgICAgICAgICAgMTAzMC43MTQzIFxuIn0= -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  birth_weight by race
+t = -1.7386, df = 37.563, p-value = 0.09031
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -320.74277   24.42531
+sample estimates:
+mean in group black mean in group white 
+           882.5556           1030.7143 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICB0LnRlc3QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% test_data$subject_id) %&gt;%
+    t.test(gestational_age_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgYnkgcmFjZVxudCA9IC0wLjE1ODAyLCBkZiA9IDU1LjY0NCwgcC12YWx1ZSA9IDAuODc1XG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMS4yMDE3OTYgIDEuMDI2MDg2XG5zYW1wbGUgZXN0aW1hdGVzOlxubWVhbiBpbiBncm91cCBibGFjayBtZWFuIGluIGdyb3VwIHdoaXRlIFxuICAgICAgICAgICAyNy44ODg4OSAgICAgICAgICAgIDI3Ljk3Njc0IFxuIn0= -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  gestational_age_weeks by race
+t = -0.15802, df = 55.644, p-value = 0.875
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -1.201796  1.026086
+sample estimates:
+mean in group black mean in group white 
+           27.88889            27.97674 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICB0LnRlc3QoYmlydGhfd2VpZ2h0IH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% test_data$subject_id) %&gt;%
+    t.test(birth_weight ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBiaXJ0aF93ZWlnaHQgYnkgcmFjZVxudCA9IC0wLjAyMTEwNCwgZGYgPSA1My42NjYsIHAtdmFsdWUgPSAwLjk4MzJcbmFsdGVybmF0aXZlIGh5cG90aGVzaXM6IHRydWUgZGlmZmVyZW5jZSBpbiBtZWFucyBiZXR3ZWVuIGdyb3VwIGJsYWNrIGFuZCBncm91cCB3aGl0ZSBpcyBub3QgZXF1YWwgdG8gMFxuOTUgcGVyY2VudCBjb25maWRlbmNlIGludGVydmFsOlxuIC0xNTUuODA0NCAgMTUyLjU1ODlcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDEwOTYuODg5ICAgICAgICAgICAgMTA5OC41MTIgXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  birth_weight by race
+t = -0.021104, df = 53.666, p-value = 0.9832
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -155.8044  152.5589
+sample estimates:
+mean in group black mean in group white 
+           1096.889            1098.512 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9wbWEgPSByb3VuZChtZWFuKHBtYV93ZWVrcyksIDEpLFxuICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lXG4gICAga2FibGUoY2FwdGlvbiA9ICdBbGwgRGF0YScpXG5gYGAifQ== -->
 <pre class="r"><code>clean_data %&gt;%
     distinct(subject_visit_id, .keep_all = TRUE) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %&gt;%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %&gt;%
     kable(caption = &#39;All Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -783,14 +912,14 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">214</td>
-<td align="right">35.14019</td>
-<td align="right">3.755306</td>
+<td align="right">35.1</td>
+<td align="right">3.8</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">339</td>
-<td align="right">34.59292</td>
-<td align="right">2.794660</td>
+<td align="right">34.6</td>
+<td align="right">2.8</td>
 </tr>
 </tbody>
 </table>
@@ -798,7 +927,7 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIGdyb3VwX2J5KHJhY2UpICU+JVxuICAgIHN1bW1hcml6ZShuID0gbigpLFxuICAgICAgICAgICAgICBtZWFuX3BtYSA9IG1lYW4ocG1hX3dlZWtzKSxcbiAgICAgICAgICAgICAgc2RfcG1hID0gc2QocG1hX3dlZWtzKSkgJT4lXG4gICAga2FibGUoY2FwdGlvbiA9ICdUcmFpbiBEYXRhJylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIGdyb3VwX2J5KHJhY2UpICU+JVxuICAgIHN1bW1hcml6ZShuID0gbigpLFxuICAgICAgICAgICAgICBtZWFuX3BtYSA9IHJvdW5kKG1lYW4ocG1hX3dlZWtzKSwgMSksXG4gICAgICAgICAgICAgIHNkX3BtYSA9IHJvdW5kKHNkKHBtYV93ZWVrcyksIDEpKSAlPiVcbiAgICBrYWJsZShjYXB0aW9uID0gJ1RyYWluIERhdGEnKVxuYGBgIn0= -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -806,8 +935,8 @@ clean_data %&gt;%
     filter(subject_id %in% train_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %&gt;%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %&gt;%
     kable(caption = &#39;Train Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -827,14 +956,14 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">100</td>
-<td align="right">35.53000</td>
-<td align="right">4.656819</td>
+<td align="right">35.5</td>
+<td align="right">4.7</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">155</td>
-<td align="right">34.38065</td>
-<td align="right">2.851910</td>
+<td align="right">34.4</td>
+<td align="right">2.9</td>
 </tr>
 </tbody>
 </table>
@@ -842,7 +971,7 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9wbWEgPSBtZWFuKHBtYV93ZWVrcyksXG4gICAgICAgICAgICAgIHNkX3BtYSA9IHNkKHBtYV93ZWVrcykpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnVmFsaWRhdGlvbiBEYXRhJylcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICBncm91cF9ieShyYWNlKSAlPiVcbiAgICBzdW1tYXJpemUobiA9IG4oKSxcbiAgICAgICAgICAgICAgbWVhbl9wbWEgPSByb3VuZChtZWFuKHBtYV93ZWVrcyksIDEpLFxuICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lXG4gICAga2FibGUoY2FwdGlvbiA9ICdWYWxpZGF0aW9uIERhdGEnKVxuYGBgIn0= -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -850,8 +979,8 @@ clean_data %&gt;%
     filter(subject_id %in% val_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %&gt;%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %&gt;%
     kable(caption = &#39;Validation Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -871,14 +1000,14 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">42</td>
-<td align="right">35.04762</td>
-<td align="right">3.083808</td>
+<td align="right">35.0</td>
+<td align="right">3.1</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">59</td>
-<td align="right">34.47458</td>
-<td align="right">2.358813</td>
+<td align="right">34.5</td>
+<td align="right">2.4</td>
 </tr>
 </tbody>
 </table>
@@ -886,7 +1015,7 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgZ3JvdXBfYnkocmFjZSkgJT4lXG4gICAgc3VtbWFyaXplKG4gPSBuKCksXG4gICAgICAgICAgICAgIG1lYW5fcG1hID0gbWVhbihwbWFfd2Vla3MpLFxuICAgICAgICAgICAgICBzZF9wbWEgPSBzZChwbWFfd2Vla3MpKSAlPiVcbiAgICBrYWJsZShjYXB0aW9uID0gJ1Rlc3QgRGF0YScpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5cbmNsZWFuX2RhdGEgJT4lXG4gICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lXG4gICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgZ3JvdXBfYnkocmFjZSkgJT4lXG4gICAgc3VtbWFyaXplKG4gPSBuKCksXG4gICAgICAgICAgICAgIG1lYW5fcG1hID0gcm91bmQobWVhbihwbWFfd2Vla3MpLCAxKSxcbiAgICAgICAgICAgICAgc2RfcG1hID0gcm91bmQoc2QocG1hX3dlZWtzKSwgMSkpICU+JVxuICAgIGthYmxlKGNhcHRpb24gPSAnVGVzdCBEYXRhJylcbmBgYCJ9 -->
 <pre class="r"><code>
 
 clean_data %&gt;%
@@ -894,8 +1023,8 @@ clean_data %&gt;%
     filter(subject_id %in% test_data$subject_id) %&gt;%
     group_by(race) %&gt;%
     summarize(n = n(),
-              mean_pma = mean(pma_weeks),
-              sd_pma = sd(pma_weeks)) %&gt;%
+              mean_pma = round(mean(pma_weeks), 1),
+              sd_pma = round(sd(pma_weeks), 1)) %&gt;%
     kable(caption = &#39;Test Data&#39;)</code></pre>
 <!-- rnb-source-end -->
 
@@ -915,14 +1044,14 @@ clean_data %&gt;%
 <tr class="odd">
 <td align="left">black</td>
 <td align="right">66</td>
-<td align="right">34.72727</td>
-<td align="right">2.508726</td>
+<td align="right">34.7</td>
+<td align="right">2.5</td>
 </tr>
 <tr class="even">
 <td align="left">white</td>
 <td align="right">102</td>
-<td align="right">34.44118</td>
-<td align="right">2.423374</td>
+<td align="right">34.4</td>
+<td align="right">2.4</td>
 </tr>
 </tbody>
 </table>
@@ -930,6 +1059,85 @@ clean_data %&gt;%
 
 <!-- rnb-html-end -->
 
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICB0LnRlc3QocG1hX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_visit_id, .keep_all = TRUE) %&gt;%
+    t.test(pma_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBwbWFfd2Vla3MgYnkgcmFjZVxudCA9IDEuODM1MSwgZGYgPSAzNjAuMjIsIHAtdmFsdWUgPSAwLjA2NzMyXG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMC4wMzkyMTE3OCAgMS4xMzM3NDQ5MFxuc2FtcGxlIGVzdGltYXRlczpcbm1lYW4gaW4gZ3JvdXAgYmxhY2sgbWVhbiBpbiBncm91cCB3aGl0ZSBcbiAgICAgICAgICAgMzUuMTQwMTkgICAgICAgICAgICAzNC41OTI5MiBcbiJ9 -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pma_weeks by race
+t = 1.8351, df = 360.22, p-value = 0.06732
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -0.03921178  1.13374490
+sample estimates:
+mean in group black mean in group white 
+           35.14019            34.59292 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRyYWluX2RhdGEkc3ViamVjdF9pZCkgJT4lXG4gICAgdC50ZXN0KHBtYV93ZWVrcyB+IHJhY2UsIGRhdGEgPSAuKVxuYGBgIn0= -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_visit_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% train_data$subject_id) %&gt;%
+    t.test(pma_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBwbWFfd2Vla3MgYnkgcmFjZVxudCA9IDIuMjE0NywgZGYgPSAxNDcuMTcsIHAtdmFsdWUgPSAwLjAyODMyXG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAwLjEyMzc1MjYgMi4xNzQ5NTcxXG5zYW1wbGUgZXN0aW1hdGVzOlxubWVhbiBpbiBncm91cCBibGFjayBtZWFuIGluIGdyb3VwIHdoaXRlIFxuICAgICAgICAgICAzNS41MzAwMCAgICAgICAgICAgIDM0LjM4MDY1IFxuIn0= -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pma_weeks by race
+t = 2.2147, df = 147.17, p-value = 0.02832
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ 0.1237526 2.1749571
+sample estimates:
+mean in group black mean in group white 
+           35.53000            34.38065 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHZhbF9kYXRhJHN1YmplY3RfaWQpICU+JVxuICAgIHQudGVzdChwbWFfd2Vla3MgfiByYWNlLCBkYXRhID0gLilcbmBgYCJ9 -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_visit_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% val_data$subject_id) %&gt;%
+    t.test(pma_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBwbWFfd2Vla3MgYnkgcmFjZVxudCA9IDEuMDExOSwgZGYgPSA3My4yNzksIHAtdmFsdWUgPSAwLjMxNDlcbmFsdGVybmF0aXZlIGh5cG90aGVzaXM6IHRydWUgZGlmZmVyZW5jZSBpbiBtZWFucyBiZXR3ZWVuIGdyb3VwIGJsYWNrIGFuZCBncm91cCB3aGl0ZSBpcyBub3QgZXF1YWwgdG8gMFxuOTUgcGVyY2VudCBjb25maWRlbmNlIGludGVydmFsOlxuIC0wLjU1NTU4MDUgIDEuNzAxNjY2MFxuc2FtcGxlIGVzdGltYXRlczpcbm1lYW4gaW4gZ3JvdXAgYmxhY2sgbWVhbiBpbiBncm91cCB3aGl0ZSBcbiAgICAgICAgICAgMzUuMDQ3NjIgICAgICAgICAgICAzNC40NzQ1OCBcbiJ9 -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pma_weeks by race
+t = 1.0119, df = 73.279, p-value = 0.3149
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -0.5555805  1.7016660
+sample estimates:
+mean in group black mean in group white 
+           35.04762            34.47458 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xlYW5fZGF0YSAlPiVcbiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiVcbiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiVcbiAgICB0LnRlc3QocG1hX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pXG5gYGAifQ== -->
+<pre class="r"><code>clean_data %&gt;%
+    distinct(subject_visit_id, .keep_all = TRUE) %&gt;%
+    filter(subject_id %in% test_data$subject_id) %&gt;%
+    t.test(pma_weeks ~ race, data = .)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5cdFdlbGNoIFR3byBTYW1wbGUgdC10ZXN0XG5cbmRhdGE6ICBwbWFfd2Vla3MgYnkgcmFjZVxudCA9IDAuNzMxNTcsIGRmID0gMTM1LjQyLCBwLXZhbHVlID0gMC40NjU3XG5hbHRlcm5hdGl2ZSBoeXBvdGhlc2lzOiB0cnVlIGRpZmZlcmVuY2UgaW4gbWVhbnMgYmV0d2VlbiBncm91cCBibGFjayBhbmQgZ3JvdXAgd2hpdGUgaXMgbm90IGVxdWFsIHRvIDBcbjk1IHBlcmNlbnQgY29uZmlkZW5jZSBpbnRlcnZhbDpcbiAtMC40ODcyOTY3ICAxLjA1OTQ4OTJcbnNhbXBsZSBlc3RpbWF0ZXM6XG5tZWFuIGluIGdyb3VwIGJsYWNrIG1lYW4gaW4gZ3JvdXAgd2hpdGUgXG4gICAgICAgICAgIDM0LjcyNzI3ICAgICAgICAgICAgMzQuNDQxMTggXG4ifQ== -->
+<pre><code>
+    Welch Two Sample t-test
+
+data:  pma_weeks by race
+t = 0.73157, df = 135.42, p-value = 0.4657
+alternative hypothesis: true difference in means between group black and group white is not equal to 0
+95 percent confidence interval:
+ -0.4872967  1.0594892
+sample estimates:
+mean in group black mean in group white 
+           34.72727            34.44118 </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -957,64 +1165,62 @@ write_csv(test_data, &#39;out/datasets/test_data.csv&#39;)</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgY29weSByZXRjYW0gaW1hZ2VzIHRvIGZvbGRlclxuc3JjID0gJy9Wb2x1bWVzL0V4dGVybmFsL2lyb3BfZGF0YS9yZXRjYW0nXG5cbmRzdCA9ICcuL291dC9kYXRhc2V0cy9yZXRjYW0vdHJhaW4vJ1xuZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhJHJhY2UsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpXG5cbmRzdCA9ICcuL291dC9kYXRhc2V0cy9yZXRjYW0vdHJhaW5fcmFuZG9tLydcbmZpbGVfY29weShwYXN0ZShzcmMsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMkcmFjZSwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuXG5kc3QgPSAnLi9vdXQvZGF0YXNldHMvcmV0Y2FtL3ZhbC8nXG5maWxlX2NvcHkocGFzdGUoc3JjLCB2YWxfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgcGFzdGUoZHN0LCB2YWxfZGF0YSRyYWNlLCB2YWxfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcblxuZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS90ZXN0LydcbmZpbGVfY29weShwYXN0ZShzcmMsIHRlc3RfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgcGFzdGUoZHN0LCB0ZXN0X2RhdGEkcmFjZSwgdGVzdF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgY29weSByZXRjYW0gaW1hZ2VzIHRvIGZvbGRlclxuc3JjID0gJy9Wb2x1bWVzL0V4dGVybmFsL2lyb3BfZGF0YS9yZXRjYW0nXG5cbiMgZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS90cmFpbi8nXG4jIGZpbGVfY29weShwYXN0ZShzcmMsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuIyAgICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhJHJhY2UsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuIyAgICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcbiMgXG5kc3QgPSAnLi9vdXQvZGF0YXNldHMvcmV0Y2FtL3RyYWluX3JhbmRvbS8nXG5maWxlX2NvcHkocGFzdGUoc3JjLCB0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcbiMgXG4jIGRzdCA9ICcuL291dC9kYXRhc2V0cy9yZXRjYW0vdmFsLydcbiMgZmlsZV9jb3B5KHBhc3RlKHNyYywgdmFsX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuIyAgICAgICAgICAgcGFzdGUoZHN0LCB2YWxfZGF0YSRyYWNlLCB2YWxfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4jICAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuIyBcbiMgZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS90ZXN0LydcbiMgZmlsZV9jb3B5KHBhc3RlKHNyYywgdGVzdF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiMgICAgICAgICAgIHBhc3RlKGRzdCwgdGVzdF9kYXRhJHJhY2UsIHRlc3RfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksXG4jICAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuYGBgIn0= -->
 <pre class="r"><code>## copy retcam images to folder
 src = &#39;/Volumes/External/irop_data/retcam&#39;
 
-dst = &#39;./out/datasets/retcam/train/&#39;
-file_copy(paste(src, train_data$fundus_location, sep = &#39;/&#39;),
-          paste(dst, train_data$race, train_data$fundus_location, sep = &#39;/&#39;),
-          overwrite = TRUE)
-
+# dst = &#39;./out/datasets/retcam/train/&#39;
+# file_copy(paste(src, train_data$fundus_location, sep = &#39;/&#39;),
+#           paste(dst, train_data$race, train_data$fundus_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)
+# 
 dst = &#39;./out/datasets/retcam/train_random/&#39;
 file_copy(paste(src, train_data_random_labels$fundus_location, sep = &#39;/&#39;),
           paste(dst, train_data_random_labels$race, train_data_random_labels$fundus_location, sep = &#39;/&#39;),
           overwrite = TRUE)
-
-dst = &#39;./out/datasets/retcam/val/&#39;
-file_copy(paste(src, val_data$fundus_location, sep = &#39;/&#39;),
-          paste(dst, val_data$race, val_data$fundus_location, sep = &#39;/&#39;),
-          overwrite = TRUE)
-
-dst = &#39;./out/datasets/retcam/test/&#39;
-file_copy(paste(src, test_data$fundus_location, sep = &#39;/&#39;),
-          paste(dst, test_data$race, test_data$fundus_location, sep = &#39;/&#39;),
-          overwrite = TRUE)</code></pre>
+# 
+# dst = &#39;./out/datasets/retcam/val/&#39;
+# file_copy(paste(src, val_data$fundus_location, sep = &#39;/&#39;),
+#           paste(dst, val_data$race, val_data$fundus_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)
+# 
+# dst = &#39;./out/datasets/retcam/test/&#39;
+# file_copy(paste(src, test_data$fundus_location, sep = &#39;/&#39;),
+#           paste(dst, test_data$race, test_data$fundus_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgY29weSBzZWdtZW50YXRpb25zIHRvIGZvbGRlclxuc3JjID0gJy9Wb2x1bWVzL0V4dGVybmFsL2lyb3BfZGF0YS9zZWdtZW50YXRpb25zJ1xuXG5kc3QgPSAnLi9vdXQvZGF0YXNldHMvc2VnbWVudGF0aW9ucy90cmFpbi8nXG5maWxlX2NvcHkocGFzdGUoc3JjLCB0cmFpbl9kYXRhJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiAgICAgICAgICBwYXN0ZShkc3QsIHRyYWluX2RhdGEkcmFjZSwgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcblxuZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdHJhaW5fcmFuZG9tLydcbmZpbGVfY29weShwYXN0ZShzcmMsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMkcmFjZSwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuXG5kc3QgPSAnLi9vdXQvZGF0YXNldHMvc2VnbWVudGF0aW9ucy92YWwvJ1xuZmlsZV9jb3B5KHBhc3RlKHNyYywgdmFsX2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIHBhc3RlKGRzdCwgdmFsX2RhdGEkcmFjZSwgdmFsX2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpXG5cbmRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3Rlc3QvJ1xuZmlsZV9jb3B5KHBhc3RlKHNyYywgdGVzdF9kYXRhJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiAgICAgICAgICBwYXN0ZShkc3QsIHRlc3RfZGF0YSRyYWNlLCB0ZXN0X2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgY29weSBzZWdtZW50YXRpb25zIHRvIGZvbGRlclxuc3JjID0gJy9Wb2x1bWVzL0V4dGVybmFsL2lyb3BfZGF0YS9zZWdtZW50YXRpb25zJ1xuXG4jIGRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3RyYWluLydcbiMgZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksXG4jICAgICAgICAgICBwYXN0ZShkc3QsIHRyYWluX2RhdGEkcmFjZSwgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksXG4jICAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKVxuIyBcbmRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3RyYWluX3JhbmRvbS8nXG5maWxlX2NvcHkocGFzdGUoc3JjLCB0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksXG4gICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcbiMgXG4jIGRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3ZhbC8nXG4jIGZpbGVfY29weShwYXN0ZShzcmMsIHZhbF9kYXRhJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiMgICAgICAgICAgIHBhc3RlKGRzdCwgdmFsX2RhdGEkcmFjZSwgdmFsX2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuIyAgICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSlcbiMgXG4jIGRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3Rlc3QvJ1xuIyBmaWxlX2NvcHkocGFzdGUoc3JjLCB0ZXN0X2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLFxuIyAgICAgICAgICAgcGFzdGUoZHN0LCB0ZXN0X2RhdGEkcmFjZSwgdGVzdF9kYXRhJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSxcbiMgICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpXG5gYGAifQ== -->
 <pre class="r"><code>## copy segmentations to folder
 src = &#39;/Volumes/External/irop_data/segmentations&#39;
 
-dst = &#39;./out/datasets/segmentations/train/&#39;
-file_copy(paste(src, train_data$segmentation_location, sep = &#39;/&#39;),
-          paste(dst, train_data$race, train_data$segmentation_location, sep = &#39;/&#39;),
-          overwrite = TRUE)
-
+# dst = &#39;./out/datasets/segmentations/train/&#39;
+# file_copy(paste(src, train_data$segmentation_location, sep = &#39;/&#39;),
+#           paste(dst, train_data$race, train_data$segmentation_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)
+# 
 dst = &#39;./out/datasets/segmentations/train_random/&#39;
 file_copy(paste(src, train_data_random_labels$segmentation_location, sep = &#39;/&#39;),
           paste(dst, train_data_random_labels$race, train_data_random_labels$segmentation_location, sep = &#39;/&#39;),
           overwrite = TRUE)
-
-dst = &#39;./out/datasets/segmentations/val/&#39;
-file_copy(paste(src, val_data$segmentation_location, sep = &#39;/&#39;),
-          paste(dst, val_data$race, val_data$segmentation_location, sep = &#39;/&#39;),
-          overwrite = TRUE)
-
-dst = &#39;./out/datasets/segmentations/test/&#39;
-file_copy(paste(src, test_data$segmentation_location, sep = &#39;/&#39;),
-          paste(dst, test_data$race, test_data$segmentation_location, sep = &#39;/&#39;),
-          overwrite = TRUE)</code></pre>
+# 
+# dst = &#39;./out/datasets/segmentations/val/&#39;
+# file_copy(paste(src, val_data$segmentation_location, sep = &#39;/&#39;),
+#           paste(dst, val_data$race, val_data$segmentation_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)
+# 
+# dst = &#39;./out/datasets/segmentations/test/&#39;
+# file_copy(paste(src, test_data$segmentation_location, sep = &#39;/&#39;),
+#           paste(dst, test_data$race, test_data$segmentation_location, sep = &#39;/&#39;),
+#           overwrite = TRUE)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAnQ3JlYXRlIERhdGFzZXRzJwphdXRob3I6ICdBdXRob3I6IEFhcm9uIFMgQ295bmVyLCBQaEQnCmRhdGU6ICdMYXN0IHVwZGF0ZTogYHIgU3lzLkRhdGUoKWAnCm91dHB1dDoKICAgIGh0bWxfbm90ZWJvb2s6CiAgICAgICAgdG9jOiB5ZXMKICAgICAgICB0b2NfZmxvYXQ6IHllcwogICAgICAgIHRvY19kZXB0aDogMwotLS0KCgojIyBTZXR1cApgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoamFuaXRvcikKbGlicmFyeSh0b29scykKbGlicmFyeShyZXNoYXBlMikKbGlicmFyeShncm91cGRhdGEyKQpsaWJyYXJ5KGZzKQpsaWJyYXJ5KGtuaXRyKQpgYGAKCgpgYGB7cn0KIyMgZGlyZWN0b3J5IHdoZXJlIGktUk9QIGRhdGEgbG9jYXRlZApkYXRhX2RpciA8LSBmaWxlLnBhdGgoJy4uJywgJy4uJywgJ2lyb3BfZGF0YScpCgojIyBsaXN0IG9mIGFsbCBhdmFpbGFibGUgc3ViamVjdHMgYW5kIGFzc29jaWF0ZWQgaW1hZ2VzIGFuZCByYWNlCmlyb3BfZGF0YSA8LSBmaWxlLnBhdGgoZGF0YV9kaXIsICdpcm9wXzA3MDkyMDIwLmNzdicpICU+JQogICAgcmVhZF9jc3YoY29sX3R5cGVzID0gY29scygpKSAlPiUKICAgIGNsZWFuX25hbWVzKCkKCiMjIGxpc3Qgb2YgYWxsIHNpYmxpbmdzIGluIHRoZSBpLVJPUCBkYXRhc2V0CnNpYmxpbmdzIDwtIGZpbGUucGF0aChkYXRhX2RpciwgJ211bHRpcGxlX2JpcnRoX3N1YmplY3RzLmNzdicpICU+JQogICAgcmVhZF9jc3YoKSAlPiUKICAgIGNsZWFuX25hbWVzKCkKICAgIAojIyBsaXN0IG9mIGFsbCBkb3dubG9hZGVkIGZ1bmR1cyBpbWFnZXMKZnVuZHVzX2ltYWdlcyA8LSBmaWxlLnBhdGgoZGF0YV9kaXIsICdyZXRjYW0nKSAlPiUKICAgIGxpc3QuZmlsZXMoKSAlPiUKICAgIGFzLmRhdGEuZnJhbWUoKSAlPiUKICAgIG11dGF0ZShpbWFnZV9pZCA9IGZpbGVfcGF0aF9zYW5zX2V4dCguKSkgJT4lCiAgICByZW5hbWUoZnVuZHVzX2xvY2F0aW9uID0gJy4nKQoKIyMgbGlzdCBvZiBhbGwgZG93bmxvYWRlZCBzZWdtZW50YXRpb25zCnNlZ21lbnRhdGlvbnMgPC0gZmlsZS5wYXRoKGRhdGFfZGlyLCAnc2VnbWVudGF0aW9ucycpICU+JQogICAgbGlzdC5maWxlcygpICU+JQogICAgYXMuZGF0YS5mcmFtZSgpICU+JQogICAgbXV0YXRlKGltYWdlX2lkID0gZmlsZV9wYXRoX3NhbnNfZXh0KC4pKSAlPiUKICAgIHJlbmFtZShzZWdtZW50YXRpb25fbG9jYXRpb24gPSAnLicpCgojIyBsaXN0IG9mIGRvd25sb2FkZWQgZnVuZHVzIGltYWdlcyB0aGF0IGhhdmUgYXNzb2NpYXRlZCBzZWdtZW50YXRpb25zCmNvbW1vbl9pbWFnZXMgPC0gZnVuZHVzX2ltYWdlcyAlPiUKICAgIGlubmVyX2pvaW4oc2VnbWVudGF0aW9ucywgYnkgPSAnaW1hZ2VfaWQnKQpgYGAKCiMjIENsZWFuIGRhdGEKYGBge3J9CiMjIHJlbW92ZSBzdWJqZWN0cyB3aG8gYXJlIG9yIGhhdmUgYSBzaWJsaW5nIGluIHRoaXMgZGF0YXNldAojIyByZW1vdmUgSGlzcGFuaWMgYmFiaWVzIGFuZCBiYWJpZXMgdGhhdCBhcmUgbm90IEJsYWNrIG9yIFdoaXRlCiMjIHJlbW92ZSBiYWJpZXMgdGhhdCBoYXZlIGV2ZXIgaGFkIFRSLVJPUCBhbmQgYmFiaWVzIHRoYXQgY3VycmVudGx5IGhhdmUgYW55IGRlZ3JlZSBvZiBST1AKY2xlYW5fZGF0YSA8LSBpcm9wX2RhdGEgJT4lCiAgICBjbGVhbl9uYW1lcygpICU+JQogICAgYW50aV9qb2luKHNpYmxpbmdzLCBieSA9ICdzdWJqZWN0X2lkJykgJT4lCiAgICBncm91cF9ieShzdWJqZWN0X2lkKSAlPiUKICAgIG11dGF0ZSh3b3JzdF9jYXRlZ29yeV9yb3AgPSBpZl9lbHNlKGV5ZSA9PSAnb2QnLCB3b3JzdF9jYXRlZ29yeV9yb3BvZCwgd29yc3RfY2F0ZWdvcnlfcm9wb3MpKSAlPiUKICAgIHVuZ3JvdXAoKSAlPiUKICAgIGZpbHRlcihyZWFkZXIgPT0gJ2dvbGRlbnN0YW5kYXJkcmVhZGluZ0BvaHN1LmVkdScsCiAgICAgICAgICAgc3VwZXJfZXRobmljaXR5ID09ICdOb24tSGlzcGFuaWMnLAogICAgICAgICAgIHJhY2UgPT0gJ0FmcmljYW4gQW1lcmljYW4nIHwgcmFjZSA9PSAnQ2F1Y2FzaWFuL1doaXRlJywKICAgICAgICAgICB3b3JzdF9jYXRlZ29yeV9yb3AgIT0gJ1RyZWF0bWVudCBSZXF1aXJpbmcnLAogICAgICAgICAgIGdvbGRlbl9yZWFkaW5nX2NhdGVnb3J5ID09ICdOb25lJykgJT4lCiAgICBtdXRhdGUocmFjZSA9IGlmX2Vsc2UocmFjZSA9PSAnQWZyaWNhbiBBbWVyaWNhbicsICdibGFjaycsICd3aGl0ZScpKQoKc3VtbWFyeShjbGVhbl9kYXRhKQpgYGAKCgpgYGB7cn0KIyMgc2VsZWN0IG9ubHkgc3ViamVjdF9pZCwgcmFjZSwgYW5kIHRoZSA1IGltYWdlIHZpZXcgY29sdW1ucyBwZXIgZXllIHBlciBleGFtIHBlciBiYWJ5CiMjIHBpdm90IHRob3NlIDcgY29sdW1ucyBpbnRvIDQgY29sdW1uczogc3ViamVjdF9pZCwgcmFjZSwgdmlldywgaW1hZ2VfbG9jYXRpb24KIyMgZHJvcCBjb2x1bW5zIHdpdGhvdXQgaW1hZ2UgbG9jYXRpb25zIGF2YWlsYWJsZQojIyBnZXQgYmFzZW5hbWUgb2YgaW1hZ2UgdXJscy9sb2NhdGlvbnMKIyMgZmlsdGVyIG91dCBpbWFnZXMgaW4gdGhpcyBkYXRhc2V0IHRoYXQgZG8gbm90IGhhdmUgYm90aCBhbiBhdmFpbGFibGUgZnVuZHVzIGltYWdlIGFuZCBzZWdtZW50YXRpb24KbWVsdGVkX2RhdGEgPC0gY2xlYW5fZGF0YSAlPiUKICAgIHNlbGVjdChzdWJqZWN0X2lkLCByYWNlLCBwb3N0ZXJpb3IsIGluZmVyaW9yLCBzdXBlcmlvciwgbmFzYWwsIHRlbXBvcmFsKSAlPiUKICAgIG1lbHQoaWQudmFycyA9IGMoJ3N1YmplY3RfaWQnLCAncmFjZScpKSAlPiUKICAgIG5hX2lmKCdOVUxMJykgJT4lCiAgICBkcm9wX25hKCkgJT4lCiAgICBtdXRhdGUoaW1hZ2VfaWQgPSBmaWxlX3BhdGhfc2Fuc19leHQoYmFzZW5hbWUodmFsdWUpKSkgJT4lCiAgICBpbm5lcl9qb2luKGNvbW1vbl9pbWFnZXMsIGJ5ID0gJ2ltYWdlX2lkJykgJT4lCiAgICBtdXRhdGUoYWNyb3NzKGMoc3ViamVjdF9pZCwgcmFjZSwgdmFyaWFibGUpLCBhcy5mYWN0b3IpKQoKc3VtbWFyeShtZWx0ZWRfZGF0YSkKYGBgCgojIyBQYXJ0aXRpb24gZGF0YQpgYGB7cn0KIyMgc2V0IHNlZWQgZm9yIHJlcHJvZHVjaWJpbGl0eQojIyBwYXJ0aXRpb24gZGF0YSBpbnRvIHRocmVlIGRhdGFzZXRzLCByb3VnaGx5IDUwLzUvNDUsIGtlZXBpbmcgc3ViamVjdHMgbXV0dWFsbHkgZXhjbHVzaXZlIHdoaWxlCiMjIGF0dGVtcHRpbmcgdG8gbWFpbnRhaW4gcmFjZSBkaXN0cmlidXRpb24KIyMgdGFrZSB0aGUgZmlyc3QgcGFydGl0aW9uICh0cmFpbikgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseQojIyByZXByZXNlbnRlZAojIyBzaHVmZmxlIHRoZSB0cmFpbmluZyBkYXRhIGxhYmVscyBmb3IgYSBzZXBhcmF0ZSBleHBlcmltZW50CiMjIHRha2UgdGhlIHNlY29uZCBwYXJ0aXRpb24gKHZhbCkgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseQojIyByZXByZXNlbnRlZAojIyB0YWtlIHRoZSB0aGlyZCBwYXJ0aXRpb24gKHRlc3QpIGFuZCBrZWVwIG9ubHkgb25lIGltYWdlIGZyb20gZWFjaCBzdWJqZWN0CnNldC5zZWVkKDEzMzcpCgpwYXJ0aXRpb25lZF9kYXRhIDwtIG1lbHRlZF9kYXRhICU+JQogICAgcGFydGl0aW9uKHAgPSBjKDAuNSwgMC4yKSwKICAgICAgICAgICAgICBpZF9jb2wgPSAnc3ViamVjdF9pZCcsCiAgICAgICAgICAgICAgY2F0X2NvbCA9ICdyYWNlJykKCnRyYWluX2RhdGEgPC0gcGFydGl0aW9uZWRfZGF0YVtbMV1dCgp0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMgPC0gdHJhaW5fZGF0YSAlPiUKICAgIHNhbXBsZV9mcmFjKCkgJT4lCiAgICBtdXRhdGUocmFjZSA9IGMocmVwKCdibGFjaycsIGZsb29yKG5yb3codHJhaW5fZGF0YSkgLyAyKSksIHJlcCgnd2hpdGUnLCBjZWlsaW5nKG5yb3codHJhaW5fZGF0YSkgLyAyKSkpKQoKdmFsX2RhdGEgPC0gcGFydGl0aW9uZWRfZGF0YVtbMl1dCgp0ZXN0X2RhdGEgPC0gcGFydGl0aW9uZWRfZGF0YVtbM11dCmBgYAoKCgpgYGB7cn0KY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgZ3JvdXBfYnkocmFjZSkgJT4lCiAgICB0LnRlc3QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pCmBgYAoKCmBgYHtyfQpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fZ2EgPSBtZWFuKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksCiAgICAgICAgICAgICAgc2RfZ2EgPSBzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLAogICAgICAgICAgICAgIG1lYW5fYncgPSBtZWFuKGJpcnRoX3dlaWdodCksCiAgICAgICAgICAgICAgc2RfYncgPSBzZChiaXJ0aF93ZWlnaHQpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnQWxsIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdHJhaW5fZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9nYSA9IG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwKICAgICAgICAgICAgICBzZF9nYSA9IHNkKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksCiAgICAgICAgICAgICAgbWVhbl9idyA9IG1lYW4oYmlydGhfd2VpZ2h0KSwKICAgICAgICAgICAgICBzZF9idyA9IHNkKGJpcnRoX3dlaWdodCkpICU+JQogICAga2FibGUoY2FwdGlvbiA9ICdUcmFpbiBEYXRhJykKCgpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHZhbF9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgZ3JvdXBfYnkocmFjZSkgJT4lCiAgICBzdW1tYXJpemUobiA9IG4oKSwKICAgICAgICAgICAgICBtZWFuX2dhID0gbWVhbihnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLAogICAgICAgICAgICAgIHNkX2dhID0gc2QoZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwKICAgICAgICAgICAgICBtZWFuX2J3ID0gbWVhbihiaXJ0aF93ZWlnaHQpLAogICAgICAgICAgICAgIHNkX2J3ID0gc2QoYmlydGhfd2VpZ2h0KSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ1ZhbGlkYXRpb24gRGF0YScpCgoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fZ2EgPSBtZWFuKGdlc3RhdGlvbmFsX2FnZV93ZWVrcyksCiAgICAgICAgICAgICAgc2RfZ2EgPSBzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLAogICAgICAgICAgICAgIG1lYW5fYncgPSBtZWFuKGJpcnRoX3dlaWdodCksCiAgICAgICAgICAgICAgc2RfYncgPSBzZChiaXJ0aF93ZWlnaHQpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnVGVzdCBEYXRhJykKYGBgCgpgYGB7cn0KY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfdmlzaXRfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZ3JvdXBfYnkocmFjZSkgJT4lCiAgICBzdW1tYXJpemUobiA9IG4oKSwKICAgICAgICAgICAgICBtZWFuX3BtYSA9IG1lYW4ocG1hX3dlZWtzKSwKICAgICAgICAgICAgICBzZF9wbWEgPSBzZChwbWFfd2Vla3MpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnQWxsIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdHJhaW5fZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9wbWEgPSBtZWFuKHBtYV93ZWVrcyksCiAgICAgICAgICAgICAgc2RfcG1hID0gc2QocG1hX3dlZWtzKSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ1RyYWluIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdmFsX2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fcG1hID0gbWVhbihwbWFfd2Vla3MpLAogICAgICAgICAgICAgIHNkX3BtYSA9IHNkKHBtYV93ZWVrcykpICU+JQogICAga2FibGUoY2FwdGlvbiA9ICdWYWxpZGF0aW9uIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdGVzdF9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgZ3JvdXBfYnkocmFjZSkgJT4lCiAgICBzdW1tYXJpemUobiA9IG4oKSwKICAgICAgICAgICAgICBtZWFuX3BtYSA9IG1lYW4ocG1hX3dlZWtzKSwKICAgICAgICAgICAgICBzZF9wbWEgPSBzZChwbWFfd2Vla3MpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnVGVzdCBEYXRhJykKYGBgCgoKIyMgTW92ZSBpbWFnZXMgdG8gZm9sZGVycwpgYGB7cn0KIyMgY3JlYXRlIGZvbGRlcnMgZm9yIGRhdGFzZXRzCmZvciAoaW1nX3R5cGUgaW4gYygncmV0Y2FtJywgJ3NlZ21lbnRhdGlvbnMnKSkgewogICAgZm9yIChkYXRhc2V0IGluIGMoJ3RyYWluJywgJ3RyYWluX3JhbmRvbScsICd2YWwnLCAndGVzdCcpKSB7CiAgICAgICAgZm9yIChyYWNlIGluIGMoJ2JsYWNrJywgJ3doaXRlJykpIHsKICAgICAgICAgICAgZGlyX2NyZWF0ZShmaWxlLnBhdGgoJ291dCcsICdkYXRhc2V0cycsIGltZ190eXBlLCBkYXRhc2V0LCByYWNlKSkKICAgICAgICB9CiAgICB9Cn0KCiMjIHdyaXRlIENTViBmaWxlcyBvZiBkYXRhc2V0cwp3cml0ZV9jc3YodHJhaW5fZGF0YSwgJ291dC9kYXRhc2V0cy90cmFpbl9kYXRhLmNzdicpCndyaXRlX2Nzdih0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMsICdvdXQvZGF0YXNldHMvdHJhaW5fZGF0YV9yYW5kb20uY3N2JykKd3JpdGVfY3N2KHZhbF9kYXRhLCAnb3V0L2RhdGFzZXRzL3ZhbF9kYXRhLmNzdicpCndyaXRlX2Nzdih0ZXN0X2RhdGEsICdvdXQvZGF0YXNldHMvdGVzdF9kYXRhLmNzdicpCmBgYAoKCmBgYHtyfQojIyBjb3B5IHJldGNhbSBpbWFnZXMgdG8gZm9sZGVyCnNyYyA9ICcvVm9sdW1lcy9FeHRlcm5hbC9pcm9wX2RhdGEvcmV0Y2FtJwoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS90cmFpbi8nCmZpbGVfY29weShwYXN0ZShzcmMsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhJHJhY2UsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSkKCmRzdCA9ICcuL291dC9kYXRhc2V0cy9yZXRjYW0vdHJhaW5fcmFuZG9tLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS92YWwvJwpmaWxlX2NvcHkocGFzdGUoc3JjLCB2YWxfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHZhbF9kYXRhJHJhY2UsIHZhbF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpCgpkc3QgPSAnLi9vdXQvZGF0YXNldHMvcmV0Y2FtL3Rlc3QvJwpmaWxlX2NvcHkocGFzdGUoc3JjLCB0ZXN0X2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB0ZXN0X2RhdGEkcmFjZSwgdGVzdF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpCmBgYAoKCmBgYHtyfQojIyBjb3B5IHNlZ21lbnRhdGlvbnMgdG8gZm9sZGVyCnNyYyA9ICcvVm9sdW1lcy9FeHRlcm5hbC9pcm9wX2RhdGEvc2VnbWVudGF0aW9ucycKCmRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3RyYWluLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHRyYWluX2RhdGEkcmFjZSwgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdHJhaW5fcmFuZG9tLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdmFsLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdmFsX2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB2YWxfZGF0YSRyYWNlLCB2YWxfZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdGVzdC8nCmZpbGVfY29weShwYXN0ZShzcmMsIHRlc3RfZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHRlc3RfZGF0YSRyYWNlLCB0ZXN0X2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSkKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAnQ3JlYXRlIERhdGFzZXRzJwphdXRob3I6ICdBdXRob3I6IEFhcm9uIFMgQ295bmVyLCBQaEQnCmRhdGU6ICdMYXN0IHVwZGF0ZTogYHIgU3lzLkRhdGUoKWAnCm91dHB1dDoKICAgIGh0bWxfbm90ZWJvb2s6CiAgICAgICAgdG9jOiB5ZXMKICAgICAgICB0b2NfZmxvYXQ6IHllcwogICAgICAgIHRvY19kZXB0aDogMwotLS0KCgojIyBTZXR1cApgYGB7cn0KbGlicmFyeSh0aWR5dmVyc2UpCmxpYnJhcnkoamFuaXRvcikKbGlicmFyeSh0b29scykKbGlicmFyeShyZXNoYXBlMikKbGlicmFyeShncm91cGRhdGEyKQpsaWJyYXJ5KGZzKQpsaWJyYXJ5KGtuaXRyKQpgYGAKCgpgYGB7cn0KIyMgZGlyZWN0b3J5IHdoZXJlIGktUk9QIGRhdGEgbG9jYXRlZApkYXRhX2RpciA8LSBmaWxlLnBhdGgoJy4uJywgJy4uJywgJ2lyb3BfZGF0YScpCgojIyBsaXN0IG9mIGFsbCBhdmFpbGFibGUgc3ViamVjdHMgYW5kIGFzc29jaWF0ZWQgaW1hZ2VzIGFuZCByYWNlCmlyb3BfZGF0YSA8LSBmaWxlLnBhdGgoZGF0YV9kaXIsICdpcm9wXzA3MDkyMDIwLmNzdicpICU+JQogICAgcmVhZF9jc3YoY29sX3R5cGVzID0gY29scygpKSAlPiUKICAgIGNsZWFuX25hbWVzKCkKCiMjIGxpc3Qgb2YgYWxsIHNpYmxpbmdzIGluIHRoZSBpLVJPUCBkYXRhc2V0CnNpYmxpbmdzIDwtIGZpbGUucGF0aChkYXRhX2RpciwgJ211bHRpcGxlX2JpcnRoX3N1YmplY3RzLmNzdicpICU+JQogICAgcmVhZF9jc3YoKSAlPiUKICAgIGNsZWFuX25hbWVzKCkKICAgIAojIyBsaXN0IG9mIGFsbCBkb3dubG9hZGVkIGZ1bmR1cyBpbWFnZXMKZnVuZHVzX2ltYWdlcyA8LSBmaWxlLnBhdGgoZGF0YV9kaXIsICdyZXRjYW0nKSAlPiUKICAgIGxpc3QuZmlsZXMoKSAlPiUKICAgIGFzLmRhdGEuZnJhbWUoKSAlPiUKICAgIG11dGF0ZShpbWFnZV9pZCA9IGZpbGVfcGF0aF9zYW5zX2V4dCguKSkgJT4lCiAgICByZW5hbWUoZnVuZHVzX2xvY2F0aW9uID0gJy4nKQoKIyMgbGlzdCBvZiBhbGwgZG93bmxvYWRlZCBzZWdtZW50YXRpb25zCnNlZ21lbnRhdGlvbnMgPC0gZmlsZS5wYXRoKGRhdGFfZGlyLCAnc2VnbWVudGF0aW9ucycpICU+JQogICAgbGlzdC5maWxlcygpICU+JQogICAgYXMuZGF0YS5mcmFtZSgpICU+JQogICAgbXV0YXRlKGltYWdlX2lkID0gZmlsZV9wYXRoX3NhbnNfZXh0KC4pKSAlPiUKICAgIHJlbmFtZShzZWdtZW50YXRpb25fbG9jYXRpb24gPSAnLicpCgojIyBsaXN0IG9mIGRvd25sb2FkZWQgZnVuZHVzIGltYWdlcyB0aGF0IGhhdmUgYXNzb2NpYXRlZCBzZWdtZW50YXRpb25zCmNvbW1vbl9pbWFnZXMgPC0gZnVuZHVzX2ltYWdlcyAlPiUKICAgIGlubmVyX2pvaW4oc2VnbWVudGF0aW9ucywgYnkgPSAnaW1hZ2VfaWQnKQpgYGAKCiMjIENsZWFuIGRhdGEKYGBge3J9CiMjIHJlbW92ZSBzdWJqZWN0cyB3aG8gYXJlIG9yIGhhdmUgYSBzaWJsaW5nIGluIHRoaXMgZGF0YXNldAojIyByZW1vdmUgSGlzcGFuaWMgYmFiaWVzIGFuZCBiYWJpZXMgdGhhdCBhcmUgbm90IEJsYWNrIG9yIFdoaXRlCiMjIHJlbW92ZSBiYWJpZXMgdGhhdCBoYXZlIGV2ZXIgaGFkIFRSLVJPUCBhbmQgYmFiaWVzIHRoYXQgY3VycmVudGx5IGhhdmUgYW55IGRlZ3JlZSBvZiBST1AKY2xlYW5fZGF0YSA8LSBpcm9wX2RhdGEgJT4lCiAgICBjbGVhbl9uYW1lcygpICU+JQogICAgYW50aV9qb2luKHNpYmxpbmdzLCBieSA9ICdzdWJqZWN0X2lkJykgJT4lCiAgICBncm91cF9ieShzdWJqZWN0X2lkKSAlPiUKICAgIG11dGF0ZSh3b3JzdF9jYXRlZ29yeV9yb3AgPSBpZl9lbHNlKGV5ZSA9PSAnb2QnLCB3b3JzdF9jYXRlZ29yeV9yb3BvZCwgd29yc3RfY2F0ZWdvcnlfcm9wb3MpKSAlPiUKICAgIHVuZ3JvdXAoKSAlPiUKICAgIGZpbHRlcihyZWFkZXIgPT0gJ2dvbGRlbnN0YW5kYXJkcmVhZGluZ0BvaHN1LmVkdScsCiAgICAgICAgICAgc3VwZXJfZXRobmljaXR5ID09ICdOb24tSGlzcGFuaWMnLAogICAgICAgICAgIHJhY2UgPT0gJ0FmcmljYW4gQW1lcmljYW4nIHwgcmFjZSA9PSAnQ2F1Y2FzaWFuL1doaXRlJywKICAgICAgICAgICB3b3JzdF9jYXRlZ29yeV9yb3AgIT0gJ1RyZWF0bWVudCBSZXF1aXJpbmcnLAogICAgICAgICAgIGdvbGRlbl9yZWFkaW5nX2NhdGVnb3J5ID09ICdOb25lJykgJT4lCiAgICBtdXRhdGUocmFjZSA9IGlmX2Vsc2UocmFjZSA9PSAnQWZyaWNhbiBBbWVyaWNhbicsICdibGFjaycsICd3aGl0ZScpKQoKc3VtbWFyeShjbGVhbl9kYXRhKQpgYGAKCgpgYGB7cn0KIyMgc2VsZWN0IG9ubHkgc3ViamVjdF9pZCwgcmFjZSwgYW5kIHRoZSA1IGltYWdlIHZpZXcgY29sdW1ucyBwZXIgZXllIHBlciBleGFtIHBlciBiYWJ5CiMjIHBpdm90IHRob3NlIDcgY29sdW1ucyBpbnRvIDQgY29sdW1uczogc3ViamVjdF9pZCwgcmFjZSwgdmlldywgaW1hZ2VfbG9jYXRpb24KIyMgZHJvcCBjb2x1bW5zIHdpdGhvdXQgaW1hZ2UgbG9jYXRpb25zIGF2YWlsYWJsZQojIyBnZXQgYmFzZW5hbWUgb2YgaW1hZ2UgdXJscy9sb2NhdGlvbnMKIyMgZmlsdGVyIG91dCBpbWFnZXMgaW4gdGhpcyBkYXRhc2V0IHRoYXQgZG8gbm90IGhhdmUgYm90aCBhbiBhdmFpbGFibGUgZnVuZHVzIGltYWdlIGFuZCBzZWdtZW50YXRpb24KbWVsdGVkX2RhdGEgPC0gY2xlYW5fZGF0YSAlPiUKICAgIHNlbGVjdChzdWJqZWN0X2lkLCByYWNlLCBwb3N0ZXJpb3IsIGluZmVyaW9yLCBzdXBlcmlvciwgbmFzYWwsIHRlbXBvcmFsKSAlPiUKICAgIG1lbHQoaWQudmFycyA9IGMoJ3N1YmplY3RfaWQnLCAncmFjZScpKSAlPiUKICAgIG5hX2lmKCdOVUxMJykgJT4lCiAgICBkcm9wX25hKCkgJT4lCiAgICBtdXRhdGUoaW1hZ2VfaWQgPSBmaWxlX3BhdGhfc2Fuc19leHQoYmFzZW5hbWUodmFsdWUpKSkgJT4lCiAgICBpbm5lcl9qb2luKGNvbW1vbl9pbWFnZXMsIGJ5ID0gJ2ltYWdlX2lkJykgJT4lCiAgICBtdXRhdGUoYWNyb3NzKGMoc3ViamVjdF9pZCwgcmFjZSwgdmFyaWFibGUpLCBhcy5mYWN0b3IpKQoKc3VtbWFyeShtZWx0ZWRfZGF0YSkKYGBgCgojIyBQYXJ0aXRpb24gZGF0YQpgYGB7cn0KIyMgc2V0IHNlZWQgZm9yIHJlcHJvZHVjaWJpbGl0eQojIyBwYXJ0aXRpb24gZGF0YSBpbnRvIHRocmVlIGRhdGFzZXRzLCByb3VnaGx5IDUwLzUvNDUsIGtlZXBpbmcgc3ViamVjdHMgbXV0dWFsbHkgZXhjbHVzaXZlIHdoaWxlCiMjIGF0dGVtcHRpbmcgdG8gbWFpbnRhaW4gcmFjZSBkaXN0cmlidXRpb24KIyMgdGFrZSB0aGUgZmlyc3QgcGFydGl0aW9uICh0cmFpbikgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseQojIyByZXByZXNlbnRlZAojIyBzaHVmZmxlIHRoZSB0cmFpbmluZyBkYXRhIGxhYmVscyBmb3IgYSBzZXBhcmF0ZSBleHBlcmltZW50CiMjIHRha2UgdGhlIHNlY29uZCBwYXJ0aXRpb24gKHZhbCkgYW5kIGRvd25zYW1wbGUgdGhlIG51bWJlciBvZiBpbWFnZXMgc28gdGhhdCByYWNlcyBhcmUgZXF1YWxseQojIyByZXByZXNlbnRlZAojIyB0YWtlIHRoZSB0aGlyZCBwYXJ0aXRpb24gKHRlc3QpIGFuZCBrZWVwIG9ubHkgb25lIGltYWdlIGZyb20gZWFjaCBzdWJqZWN0CnNldC5zZWVkKDEzMzcpCnBhcnRpdGlvbmVkX2RhdGEgPC0gbWVsdGVkX2RhdGEgJT4lCiAgICBwYXJ0aXRpb24ocCA9IGMoMC41LCAwLjIpLAogICAgICAgICAgICAgIGlkX2NvbCA9ICdzdWJqZWN0X2lkJywKICAgICAgICAgICAgICBjYXRfY29sID0gJ3JhY2UnKQoKdHJhaW5fZGF0YSA8LSBwYXJ0aXRpb25lZF9kYXRhW1sxXV0KCnRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyA8LSB0cmFpbl9kYXRhICU+JQogICAgc2FtcGxlX2ZyYWMoKSAlPiUKICAgIG11dGF0ZShyYWNlID0gYyhyZXAoJ2JsYWNrJywgZmxvb3IobnJvdyh0cmFpbl9kYXRhKSAvIDIpKSwgcmVwKCd3aGl0ZScsIGNlaWxpbmcobnJvdyh0cmFpbl9kYXRhKSAvIDIpKSkpCgp2YWxfZGF0YSA8LSBwYXJ0aXRpb25lZF9kYXRhW1syXV0KCnRlc3RfZGF0YSA8LSBwYXJ0aXRpb25lZF9kYXRhW1szXV0KYGBgCgoKYGBge3J9CmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksCiAgICAgICAgICAgICAgc2RfZ2EgPSByb3VuZChzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBtZWFuX2J3ID0gcm91bmQobWVhbihiaXJ0aF93ZWlnaHQpLCAxKSwKICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnQWxsIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdHJhaW5fZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksCiAgICAgICAgICAgICAgc2RfZ2EgPSByb3VuZChzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBtZWFuX2J3ID0gcm91bmQobWVhbihiaXJ0aF93ZWlnaHQpLCAxKSwKICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnVHJhaW4gRGF0YScpCgoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksCiAgICAgICAgICAgICAgc2RfZ2EgPSByb3VuZChzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBtZWFuX2J3ID0gcm91bmQobWVhbihiaXJ0aF93ZWlnaHQpLCAxKSwKICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnVmFsaWRhdGlvbiBEYXRhJykKCgpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIGdyb3VwX2J5KHJhY2UpICU+JQogICAgc3VtbWFyaXplKG4gPSBuKCksCiAgICAgICAgICAgICAgbWVhbl9nYSA9IHJvdW5kKG1lYW4oZ2VzdGF0aW9uYWxfYWdlX3dlZWtzKSwgMSksCiAgICAgICAgICAgICAgc2RfZ2EgPSByb3VuZChzZChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBtZWFuX2J3ID0gcm91bmQobWVhbihiaXJ0aF93ZWlnaHQpLCAxKSwKICAgICAgICAgICAgICBzZF9idyA9IHJvdW5kKHNkKGJpcnRoX3dlaWdodCksIDEpKSAlPiUKICAgIGthYmxlKGNhcHRpb24gPSAnVGVzdCBEYXRhJykKYGBgCgpgYGB7cn0KY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgdC50ZXN0KGdlc3RhdGlvbmFsX2FnZV93ZWVrcyB+IHJhY2UsIGRhdGEgPSAuKQoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgdC50ZXN0KGJpcnRoX3dlaWdodCB+IHJhY2UsIGRhdGEgPSAuKQoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgdC50ZXN0KGdlc3RhdGlvbmFsX2FnZV93ZWVrcyB+IHJhY2UsIGRhdGEgPSAuKQoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0cmFpbl9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgdC50ZXN0KGJpcnRoX3dlaWdodCB+IHJhY2UsIGRhdGEgPSAuKQoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB2YWxfZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIHQudGVzdChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgfiByYWNlLCBkYXRhID0gLikKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdmFsX2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICB0LnRlc3QoYmlydGhfd2VpZ2h0IH4gcmFjZSwgZGF0YSA9IC4pCgpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIHQudGVzdChnZXN0YXRpb25hbF9hZ2Vfd2Vla3MgfiByYWNlLCBkYXRhID0gLikKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdGVzdF9kYXRhJHN1YmplY3RfaWQpICU+JQogICAgdC50ZXN0KGJpcnRoX3dlaWdodCB+IHJhY2UsIGRhdGEgPSAuKQpgYGAKCmBgYHtyfQpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fcG1hID0gcm91bmQobWVhbihwbWFfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ0FsbCBEYXRhJykKCgpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRyYWluX2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fcG1hID0gcm91bmQobWVhbihwbWFfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ1RyYWluIERhdGEnKQoKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdmFsX2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fcG1hID0gcm91bmQobWVhbihwbWFfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ1ZhbGlkYXRpb24gRGF0YScpCgoKY2xlYW5fZGF0YSAlPiUKICAgIGRpc3RpbmN0KHN1YmplY3RfdmlzaXRfaWQsIC5rZWVwX2FsbCA9IFRSVUUpICU+JQogICAgZmlsdGVyKHN1YmplY3RfaWQgJWluJSB0ZXN0X2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICBncm91cF9ieShyYWNlKSAlPiUKICAgIHN1bW1hcml6ZShuID0gbigpLAogICAgICAgICAgICAgIG1lYW5fcG1hID0gcm91bmQobWVhbihwbWFfd2Vla3MpLCAxKSwKICAgICAgICAgICAgICBzZF9wbWEgPSByb3VuZChzZChwbWFfd2Vla3MpLCAxKSkgJT4lCiAgICBrYWJsZShjYXB0aW9uID0gJ1Rlc3QgRGF0YScpCmBgYAoKYGBge3J9CmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIHQudGVzdChwbWFfd2Vla3MgfiByYWNlLCBkYXRhID0gLikKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdHJhaW5fZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIHQudGVzdChwbWFfd2Vla3MgfiByYWNlLCBkYXRhID0gLikKCmNsZWFuX2RhdGEgJT4lCiAgICBkaXN0aW5jdChzdWJqZWN0X3Zpc2l0X2lkLCAua2VlcF9hbGwgPSBUUlVFKSAlPiUKICAgIGZpbHRlcihzdWJqZWN0X2lkICVpbiUgdmFsX2RhdGEkc3ViamVjdF9pZCkgJT4lCiAgICB0LnRlc3QocG1hX3dlZWtzIH4gcmFjZSwgZGF0YSA9IC4pCgpjbGVhbl9kYXRhICU+JQogICAgZGlzdGluY3Qoc3ViamVjdF92aXNpdF9pZCwgLmtlZXBfYWxsID0gVFJVRSkgJT4lCiAgICBmaWx0ZXIoc3ViamVjdF9pZCAlaW4lIHRlc3RfZGF0YSRzdWJqZWN0X2lkKSAlPiUKICAgIHQudGVzdChwbWFfd2Vla3MgfiByYWNlLCBkYXRhID0gLikKYGBgCgoKIyMgTW92ZSBpbWFnZXMgdG8gZm9sZGVycwpgYGB7cn0KIyMgY3JlYXRlIGZvbGRlcnMgZm9yIGRhdGFzZXRzCmZvciAoaW1nX3R5cGUgaW4gYygncmV0Y2FtJywgJ3NlZ21lbnRhdGlvbnMnKSkgewogICAgZm9yIChkYXRhc2V0IGluIGMoJ3RyYWluJywgJ3RyYWluX3JhbmRvbScsICd2YWwnLCAndGVzdCcpKSB7CiAgICAgICAgZm9yIChyYWNlIGluIGMoJ2JsYWNrJywgJ3doaXRlJykpIHsKICAgICAgICAgICAgZGlyX2NyZWF0ZShmaWxlLnBhdGgoJ291dCcsICdkYXRhc2V0cycsIGltZ190eXBlLCBkYXRhc2V0LCByYWNlKSkKICAgICAgICB9CiAgICB9Cn0KCiMjIHdyaXRlIENTViBmaWxlcyBvZiBkYXRhc2V0cwp3cml0ZV9jc3YodHJhaW5fZGF0YSwgJ291dC9kYXRhc2V0cy90cmFpbl9kYXRhLmNzdicpCndyaXRlX2Nzdih0cmFpbl9kYXRhX3JhbmRvbV9sYWJlbHMsICdvdXQvZGF0YXNldHMvdHJhaW5fZGF0YV9yYW5kb20uY3N2JykKd3JpdGVfY3N2KHZhbF9kYXRhLCAnb3V0L2RhdGFzZXRzL3ZhbF9kYXRhLmNzdicpCndyaXRlX2Nzdih0ZXN0X2RhdGEsICdvdXQvZGF0YXNldHMvdGVzdF9kYXRhLmNzdicpCmBgYAoKCmBgYHtyfQojIyBjb3B5IHJldGNhbSBpbWFnZXMgdG8gZm9sZGVyCnNyYyA9ICcvVm9sdW1lcy9FeHRlcm5hbC9pcm9wX2RhdGEvcmV0Y2FtJwoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS90cmFpbi8nCmZpbGVfY29weShwYXN0ZShzcmMsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB0cmFpbl9kYXRhJHJhY2UsIHRyYWluX2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSkKCmRzdCA9ICcuL291dC9kYXRhc2V0cy9yZXRjYW0vdHJhaW5fcmFuZG9tLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3JldGNhbS92YWwvJwpmaWxlX2NvcHkocGFzdGUoc3JjLCB2YWxfZGF0YSRmdW5kdXNfbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHZhbF9kYXRhJHJhY2UsIHZhbF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpCgpkc3QgPSAnLi9vdXQvZGF0YXNldHMvcmV0Y2FtL3Rlc3QvJwpmaWxlX2NvcHkocGFzdGUoc3JjLCB0ZXN0X2RhdGEkZnVuZHVzX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB0ZXN0X2RhdGEkcmFjZSwgdGVzdF9kYXRhJGZ1bmR1c19sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIG92ZXJ3cml0ZSA9IFRSVUUpCmBgYAoKCmBgYHtyfQojIyBjb3B5IHNlZ21lbnRhdGlvbnMgdG8gZm9sZGVyCnNyYyA9ICcvVm9sdW1lcy9FeHRlcm5hbC9pcm9wX2RhdGEvc2VnbWVudGF0aW9ucycKCmRzdCA9ICcuL291dC9kYXRhc2V0cy9zZWdtZW50YXRpb25zL3RyYWluLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHRyYWluX2RhdGEkcmFjZSwgdHJhaW5fZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdHJhaW5fcmFuZG9tLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHNlZ21lbnRhdGlvbl9sb2NhdGlvbiwgc2VwID0gJy8nKSwKICAgICAgICAgIHBhc3RlKGRzdCwgdHJhaW5fZGF0YV9yYW5kb21fbGFiZWxzJHJhY2UsIHRyYWluX2RhdGFfcmFuZG9tX2xhYmVscyRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdmFsLycKZmlsZV9jb3B5KHBhc3RlKHNyYywgdmFsX2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgcGFzdGUoZHN0LCB2YWxfZGF0YSRyYWNlLCB2YWxfZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBvdmVyd3JpdGUgPSBUUlVFKQoKZHN0ID0gJy4vb3V0L2RhdGFzZXRzL3NlZ21lbnRhdGlvbnMvdGVzdC8nCmZpbGVfY29weShwYXN0ZShzcmMsIHRlc3RfZGF0YSRzZWdtZW50YXRpb25fbG9jYXRpb24sIHNlcCA9ICcvJyksCiAgICAgICAgICBwYXN0ZShkc3QsIHRlc3RfZGF0YSRyYWNlLCB0ZXN0X2RhdGEkc2VnbWVudGF0aW9uX2xvY2F0aW9uLCBzZXAgPSAnLycpLAogICAgICAgICAgb3ZlcndyaXRlID0gVFJVRSkKYGBgCg==</div>
 
 
 </div>
