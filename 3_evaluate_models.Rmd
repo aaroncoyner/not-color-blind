@@ -69,6 +69,11 @@ compute_aupr <- function(predictions, labels, title) {
 ```
 
 
+
+
+
+
+
 ```{r}
 confusion_matrix <- function(df, column, threshold=0.5) {
     preds <- as.factor(if_else(df[column] >= threshold, 1, 0))
@@ -778,4 +783,108 @@ confusion_matrix(subject_level, 'filter_75_binarized')
 compute_aupr(subject_level$filter_75_skeletonized, subject_level$label, 'PR: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
 compute_auroc(subject_level$filter_75_skeletonized, subject_level$label, 'ROC: Segmentations: zero all pixels < 75 and > 150 and skeletonize')
 confusion_matrix(subject_level, 'filter_75_skeletonized')
+```
+
+
+
+```{r}
+aupr_figures <- function(predictions, labels, title, names, save_name) {
+    n_black <- length(labels[labels == 1])
+    n_total <- length(labels)
+    for (i in seq_along(predictions)) {
+        preds <- prediction(predictions[i], labels)
+        aupr <- performance(preds, measure = 'aucpr')
+        aupr <- aupr@y.values[[1]]
+        perf <- performance(preds, 'prec', 'rec')
+        if (is.null(dev.list())) {
+            png(save_name,
+                width=7,
+                height=5,
+                units='in',
+                res=300)
+            plot(perf,
+                 main = title,
+                 xlim=c(0,1),
+                 ylim=c(0,1),
+                 col = i,
+                 lwd = 2)
+        } else {
+            plot(perf,
+                 main = title,
+                 xlim=c(0,1),
+                 ylim=c(0,1),
+                 col = i,
+                 lwd = 2,
+                 add = TRUE)
+        }
+    }
+    abline(a = n_black/n_total,
+           b = 0,
+           col = 'red',
+           lty = 2,
+           lwd = 2)
+    legend('bottomleft',
+           names,
+           lwd = 2,
+           col = seq_along(predictions),
+           bty = 'n',
+           inset = c(0.1, 0.07))
+    legend('bottomleft',
+           paste('Null AUPR:', sprintf('%.3f', round(n_black / n_total, 3))),
+           lwd = 2,
+           lty = 2,
+           col = 'red',
+           bty = 'n',
+           inset = c(0.1, 0.0))
+}
+```
+
+
+## Figures for Paper
+```{r}
+aupr_figures(list(image_level$filter_0, image_level$filter_50, image_level$filter_200, image_level$filter_240),
+             image_level$label,
+             'Precision-Recall Curves of Thresholded RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/thresholded_image.png')
+```
+
+```{r}
+aupr_figures(list(image_level$filter_0_binarized, image_level$filter_50_binarized, image_level$filter_200_binarized, image_level$filter_240_binarized),
+             image_level$label,
+             'Precision-Recall Curves of Binarized RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/binarized_image.png')
+```
+
+```{r}
+aupr_figures(list(image_level$filter_0_skeletonized, image_level$filter_50_skeletonized, image_level$filter_200_skeletonized, image_level$filter_240_skeletonized),
+             image_level$label,
+             'Precision-Recall Curves of Skeletonized RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/skeletonized_image.png')
+```
+
+```{r}
+aupr_figures(list(subject_level$filter_0, subject_level$filter_50, subject_level$filter_200, subject_level$filter_240),
+             subject_level$label,
+             'Precision-Recall Curves of Thresholded RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/thresholded_subject.png')
+```
+
+```{r}
+aupr_figures(list(subject_level$filter_0_binarized, subject_level$filter_50_binarized, subject_level$filter_200_binarized, subject_level$filter_240_binarized),
+             subject_level$label,
+             'Precision-Recall Curves of Binarized RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/binarized_subject.png')
+```
+
+```{r}
+aupr_figures(list(subject_level$filter_0_skeletonized, subject_level$filter_50_skeletonized, subject_level$filter_200_skeletonized, subject_level$filter_240_skeletonized),
+             subject_level$label,
+             'Precision-Recall Curves of Skeletonized RVMs',
+             c('Threshold 0 AUPR:', 'Threshold 50 AUPR: ', 'Threshold 150 AUPR: ', 'Threshold 220 AUPR: '),
+             './out/figures/skeletonized_subject.png')
 ```
