@@ -1,7 +1,6 @@
 # not-color-blind
 
-Code repository for _Not Color Blind: AI Predicts Racial Identity from Black and White Retinal Vessel Segmentations_. Authored by Aaron S. Coyner, PhD, Praveer Singh, PhD, James M. Brown, PhD, Susan Ostmo MS, R.V.Paul Chan MD, Michael F. Chiang MD, MA, Jayashree Kalpathy-Cramer PhD, and J. Peter Campbell MD, MPH. ASC and PS contributed to this work equally. JKC and JPC supervised this work equally.
-
+Code repository for [Not Color Blind: AI Predicts Racial Identity from Black and White Retinal Vessel Segmentations](). Authored by Aaron S. Coyner, PhD, Praveer Singh, PhD, James M. Brown, PhD, Susan Ostmo MS, R.V.Paul Chan MD, Michael F. Chiang MD, MA, Jayashree Kalpathy-Cramer PhD, and J. Peter Campbell MD, MPH. ASC and PS contributed to this work equally. JKC and JPC supervised this work equally.
 ## Abstract
 
 ### Background
