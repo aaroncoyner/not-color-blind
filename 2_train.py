@@ -176,26 +176,24 @@ if __name__ == '__main__':
 
     data_dir = os.path.join('out', 'datasets')
 
-    # threshold = 75
-    # train(data_dir, 'segmentations', threshold=threshold, upper=True)
-    # train(data_dir, 'segmentations', binary=True, threshold=threshold, upper=True)
-    # train(data_dir, 'segmentations', skeleton=True, threshold=threshold, upper=True)
-    #
-    # threshold = 0
-    # upper_threshold = 10
-    # train(data_dir, 'segmentations', threshold=threshold,
-    #       upper=True, upper_threshold=upper_threshold)
-    # train(data_dir, 'segmentations', binary=True, threshold=threshold,
-    #       upper=True, upper_threshold=upper_threshold)
-    # train(data_dir, 'segmentations', skeleton=True, threshold=threshold,
-    #       upper=True, upper_threshold=upper_threshold)
+    threshold = 75
+    train(data_dir, 'segmentations', threshold=threshold, upper=True)
+    train(data_dir, 'segmentations', binary=True, threshold=threshold, upper=True)
+    train(data_dir, 'segmentations', skeleton=True, threshold=threshold, upper=True)
 
-    # train(data_dir, 'retcam')
-    # train(data_dir, 'retcam', random=True)
-    train(data_dir, 'segmentations', random=True)
-    #
-    # thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 257]
-    # for threshold in thresholds:
-    #     train(data_dir, 'segmentations', threshold=threshold)
-    #     train(data_dir, 'segmentations', binary=True, threshold=threshold)
-    #     train(data_dir, 'segmentations', skeleton=True, threshold=threshold)
+    threshold = 0
+    upper_threshold = 10
+    train(data_dir, 'segmentations', threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
+    train(data_dir, 'segmentations', binary=True, threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
+    train(data_dir, 'segmentations', skeleton=True, threshold=threshold,
+          upper=True, upper_threshold=upper_threshold)
+
+    train(data_dir, 'retcam')
+
+    thresholds = [0, 50, 100, 150, 200, 210, 220, 230, 240, 250, 257]
+    for threshold in thresholds:
+        train(data_dir, 'segmentations', threshold=threshold)
+        train(data_dir, 'segmentations', binary=True, threshold=threshold)
+        train(data_dir, 'segmentations', skeleton=True, threshold=threshold)

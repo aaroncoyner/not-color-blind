@@ -124,6 +124,7 @@ test_data <- partitioned_data[[3]]
 ```
 
 
+## t-Tests (BW/GA)
 ```{r}
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
@@ -172,6 +173,7 @@ clean_data %>%
     kable(caption = 'Test Data')
 ```
 
+
 ```{r}
 clean_data %>%
     distinct(subject_id, .keep_all = TRUE) %>%
@@ -212,6 +214,8 @@ clean_data %>%
     t.test(birth_weight ~ race, data = .)
 ```
 
+
+## t-Test (PMA)
 ```{r}
 clean_data %>%
     distinct(subject_visit_id, .keep_all = TRUE) %>%

@@ -38,8 +38,6 @@ def filter(img, binary, skeleton):
         img[:,:,1] = skeleton_img
         img[:,:,2] = skeleton_img
     img = Image.fromarray(img)
-    # plt.imshow(img, interpolation='nearest')
-    # plt.show()
     return img
 
 
