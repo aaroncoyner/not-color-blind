@@ -57,7 +57,7 @@ def test(data_dir, image_type, binary=False, skeleton=False, num_classes=2, batc
         skeleton = False
         csv_name = f'./out/probabilities/{image_type}_binarized_test.csv'
     else:
-        csv_name = f'./out/probabilities/{image_type}.csv'
+        csv_name = f'./out/probabilities/{image_type}_test.csv'
 
     test_transforms = transforms.Compose([transforms.Lambda(lambda img: filter(img, binary, skeleton)),
                                           transforms.Resize(image_size),
